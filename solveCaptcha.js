@@ -55,6 +55,7 @@ function pollForResult(taskId, apiKey) {
     .then(data => {
         if (data.status === 'ready') {
             console.log('CAPTCHA Text:', data.solution.text);
+            document.querySelector('input.bB[name=mxn]').value = data.solution.text;
         } else {
             console.log('Task not ready yet, polling again in 5 seconds...');
             setTimeout(() => pollForResult(taskId, apiKey), 5000);
@@ -64,3 +65,5 @@ function pollForResult(taskId, apiKey) {
         console.error('Error:', error);
     });
 }
+
+
