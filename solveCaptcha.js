@@ -1,4 +1,4 @@
-let apiKey = 16e27e68938cdb1fc7633a9ebef359f3;
+let apiKey = '16e27e68938cdb1fc7633a9ebef359f3';
 // Find the CAPTCHA image element
 var captchaImage = document.querySelector('img[src*="gold-online"]'); // Adjust the selector based on the actual HTML
 
