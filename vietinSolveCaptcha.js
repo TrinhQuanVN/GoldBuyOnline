@@ -52,7 +52,11 @@ if (captchaImage) {
         clientKey: apiKey,
         task: {
             type: 'ImageToTextTask',
-            body: base64data
+            body: base64data,
+            numeric: 0,
+          minLength: 5,
+          maxLength: 5,
+          websiteURL:'dangkymuavang.vietinbankgold.vn',
         }
     };
 
@@ -97,7 +101,7 @@ function pollForResult(taskId, apiKey) {
             document.querySelector('input.bB[name=mxn]').value = data.solution.text;
         } else {
             console.log('Task not ready yet, polling again in 5 seconds...');
-            setTimeout(() => pollForResult(taskId, apiKey), 5000);
+            setTimeout(() => pollForResult(taskId, apiKey), 1000);
         }
     })
     .catch(error => {
