@@ -276,7 +276,7 @@ let person = {
   issuePlace: 'cục cảnh sát qlhc về ttxh',
   issueDate: '24/08/2022',
   address: '16 ngách 222/61 lê duẩn khâm thiên đống đa hà nội',
-  phone: '0962130922',
+  phone: '0383626584',
   birthday: '13/11/2000',
   email: '',
   vietinSexIndex: 2,
