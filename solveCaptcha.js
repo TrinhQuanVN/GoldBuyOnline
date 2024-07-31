@@ -1,7 +1,35 @@
 let apiKey = '16e27e68938cdb1fc7633a9ebef359f3';
 
 var captchaImage = document.querySelector('img[src*="gold-online"]'); // Adjust the selector based on the actual HTML
-
+var payload = {
+    
+};
+//numeric: 0 - không có yêu cầu 1 - chỉ cho phép số 2 - cho phép mọi chữ cái ngoại trừ số
+//body: Nội dung tập tin được mã hóa trong base64
+//minLength: 0 - không có yêu cầu >0 - xác định độ dài tối thiểu của câu trả lời
+//maxLength: 0 - không có yêu cầu >0 - xác định độ dài tối đa của câu trả lời
+function createPayloadAntiCaptcha(apiKey,type='ImageToTextTask',body,numeric=0,minLength=0,maxLength=0){
+    return {
+        clientKey: apiKey,
+    "task":
+        {
+            "type":"ImageToTextTask",
+            "body":"BASE64_BODY_HERE__NO_NEWLINES__NO_EXTRA_TAGS__ONLY_CLEAN_BASE64",
+            "phrase":false,
+            "case":false,
+            "numeric":0,
+            "math":false,
+            "minLength":0,
+            "maxLength":0,
+            "languagePool":"en"
+        },
+    "softId": 0
+    }
+},
+function solveCaptcha(api,image){
+    var basedata = imageToBase64(image);
+    var antiCaptchaSolve(api,basedata,payload);
+}
 if (captchaImage) {
     var canvas = document.createElement('canvas');// Create a canvas element
     canvas.width = captchaImage.width;
