@@ -269,3 +269,23 @@ bidv: 8862729850
 035167002061
 12/01/2022
 Thôn nhật hà, tiên sơn, thị xã duy tiên, hà nam
+--------------Phan Cao Kỳ
+let person = {
+  fullName: 'Phan Cao Kỳ',
+  idNumber: '001200025769',
+  issuePlace: 'cục cảnh sát qlhc về ttxh',
+  issueDate: '24/08/2022',
+  address: '16 ngách 222/61 lê duẩn khâm thiên đống đa hà nội',
+  phone: '0962130922',
+  birthday: '13/11/2000',
+  email: '',
+  vietinSexIndex: 2,
+  vietinLoaiCC: 1,
+  vietinNoiGiaoDich: 1,
+  bidvAccNum: 1208725462, //tài khoản bid
+  bidvAmount: 1,
+  bidvBranch: 1, //dia điểm giao dịch
+  bidvCapital: 1,
+  bidvPurpose: 2,
+  bidvIssuePlace: 0,
+}
