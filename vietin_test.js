@@ -83,3 +83,16 @@ var timer = setInterval(function() {
         }
     }
 }, 1);
+// function reload the website
+async function fetchUntilSuccess(url) {
+  try {
+    const response = await fetch(url);
+    if (response.ok) {
+      console.log(await response.json());
+    } else {
+      fetchUntilSuccess(url); // retry immediately
+    }
+  } catch (error) {
+    fetchUntilSuccess(url); // retry immediately
+  }
+}
