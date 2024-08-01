@@ -56,7 +56,7 @@ var timer = setInterval(function() {
   mxn = document.querySelector('input.bB[name="mxn"]'); // Trường nhập captcha
   thongBao = document.querySelector('.tB').innerText;//thong bao
   inputEmailCode = document.querySelector('input[name="dh"]'); // Trường nhập mã email
-    if(now.getHours()===11){
+    if(now.getHours()===10){
       if (mxn.value.length === 5) {
             if (button.disabled) {
               button.disabled = false;
