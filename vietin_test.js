@@ -35,7 +35,19 @@ setTimeout(function() {
   window.scrollTo(0, document.body.scrollHeight);  // Cuộn xuống cuối trang
   console.log('fill info scueess');
 },10);
-
+// function reload the website
+async function fetchUntilSuccess(url) {
+  try {
+    const response = await fetch(url);
+    if (response.ok) {
+      console.log(await response.json());
+    } else {
+      fetchUntilSuccess(url); // retry immediately
+    }
+  } catch (error) {
+    fetchUntilSuccess(url); // retry immediately
+  }
+}
 //enable button dang ky
 let button;
 let mxn;
@@ -50,7 +62,7 @@ var timer = setInterval(function() {
         second: '2-digit',
         hour12: false // Use 24-hour format
     };
-    console.log(now.toLocaleTimeString('en-US', options));
+    //console.log(now.toLocaleTimeString('en-US', options));
   
   button = document.querySelector('.pa-btn.gh'); // Nút xác nhận xac nhap trang 1
   mxn = document.querySelector('input.bB[name="mxn"]'); // Trường nhập captcha
