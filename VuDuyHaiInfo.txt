@@ -229,11 +229,30 @@ bidv:8852851775
 001179044532
 10/07/2021
 Phong Triều, nam Triều, Phú xuyên, Hà nội
-
+--------------Cao Hiếu Ngân
+let person = {
+  fullName: 'Cao Hiếu Ngân',
+  idNumber: '035301004712',
+  issuePlace: 'cục cảnh sát qlhc về ttxh',
+  issueDate: '15/01/2022',
+  address: 'Tổ 8 Trần Hưng Đạo, Phủ Lý, hà nam',
+  phone: '0914837055',
+  birthday: '06/12/2001',
+  email: 'nganch.mgc@gmail.com',
+  vietinSexIndex: 1,
+  vietinLoaiCC: 1,
+  vietinNoiGiaoDich: 2,
+  bidvAccNum: 8882851002, //tài khoản bid
+  bidvAmount: 1,
+  bidvBranch: 1, //dia điểm giao dịch
+  bidvCapital: 1,
+  bidvPurpose: 2,
+  bidvIssuePlace: 0,
+}
 --------------Cao Hiếu Ngân
 Cao Hiếu Ngân
 06/12/2001
-email //
+email nganch.mgc@gmail.com//Ngan2001
 0914837055
 bidv:8882851002
 035301004712
