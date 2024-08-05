@@ -146,4 +146,80 @@ function pollForResult(taskId, apiKey) {
     });
 }
 
+//blackbox.ai
+// Configuration
+const API_KEY = '16e27e68938cdb1fc7633a9ebef359f3';
+const NUMERIC = 1;//numeric: 0 - không có yêu cầu 1 - chỉ cho phép số 2 - cho phép mọi chữ cái ngoại trừ số
+const MIN_LENGTH = 5;
+const MAX_LENGTH = 5;
+var captchaImage = document.querySelector('img[src*="gold-online"]'); // Adjust the selector based on the actual HTML
 
+let payload = {
+        clientKey: API_KEY,
+        task: {
+            type: 'ImageToTextTask',
+            body:'',
+            phrase: false,
+            case: false,
+            numeric: NUMERIC,
+            math: false,
+            minLength: MIN_LENGTH,
+            maxLength: MAX_LENGTH,
+            languagePool: 'en'
+        },
+        softId: 0
+    }
+function solveCaptcha(image) {
+    return new Promise((resolve, reject) => {
+        const base64Data = imageToBase64(image);
+        payload.task.body = base64Data;
+        payload.clientKey = API_KEY;
+
+        fetch('https://api.anti-captcha.com/createTask', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+            const taskId = data.taskId;
+            const intervalId = setInterval(() => {
+                fetch('https://api.anti-captcha.com/getTaskResult', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        clientKey: apiKey,
+                        taskId: taskId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'ready') {
+                        clearInterval(intervalId);
+                        resolve(data.solution.text);
+                    }
+                })
+                .catch(error => {
+                    clearInterval(intervalId);
+                    reject(error);
+                });
+            }, 1000);
+        })
+        .catch(error => {
+            reject(error);
+        });
+    });
+}
+
+function imageToBase64(image) {
+    const canvas = document.createElement('canvas');
+    canvas.width = image.width;
+    canvas.height = image.height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(image, 0, 0);
+    return canvas.toDataURL('image/png').split(',')[1];
+}
