@@ -15,24 +15,24 @@
         }
 
         const person = {
-            fullName: 'trịnh tiến quân',
-            idNumber: '035092013752',
-            issuePlace: 'cục cảnh sát qlhc về ttxh',
-            issueDate: '25/08/2021',
-            address: 'Lương Khánh Thiện, Phủ Lý, hà nam',
-            phone: '0962130922',
-            birthday: '28/10/1992',
-            email: 'trinhquanhn1992@gmail.com',
-            vietinSexIndex: 2,
-            vietinLoaiCC: 1,
-            vietinNoiGiaoDich: 1,
-            bidvAccNum: 4821813240,
-            bidvAmount: 1,
-            bidvBranch: 1,
-            bidvCapital: 1,
-            bidvPurpose: 2,
-            bidvIssuePlace: 0,
-        };
+      fullName: 'Mai Văn Tùng',
+      idNumber: '035203003891',
+      issuePlace: 'cục cảnh sát qlhc về ttxh',
+      issueDate: '31/12/2021',
+      address: 'đồng tân, tân sơn, kim bảng, hà nam',
+      phone: '0949355950',
+      birthday: '30/01/2003',
+      email: 'mai.vantung03@proton.me',//Maivantung03@
+      vietinSexIndex: 2, //2 nam 1 nu
+      vietinLoaiCC: 1,
+      vietinNoiGiaoDich: 1,
+      bidvAccNum: 4823373892, //tài khoản bid
+      bidvAmount: 1,
+      bidvBranch: 1, //dia điểm giao dịch
+      bidvCapital: 1,
+      bidvPurpose: 2,
+      bidvIssuePlace: 0,
+    }
 
         const API_KEY = '16e27e68938cdb1fc7633a9ebef359f3';
         const NUMERIC = 0;
@@ -218,11 +218,11 @@
 
             if (currentHour === 9 || (currentHour === 10 && currentMinute === 0)) {
                 window.location.href = targetUrl;
-                setTimeout(main, 100); // Delay to ensure page load
+                setTimeout(main, 100);
             } else if (currentHour === 10 && currentMinute > 0) {
                 clearInterval(interval);
             }
         }, 5000);
-    })();">Run Script</a>
+    })();">Agri Mai Van Tung</a>
 </body>
 </html>
