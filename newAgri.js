@@ -4,45 +4,60 @@ const MIN_LENGTH = 6;//vietin 5so - agribank 6 chu
 const MAX_LENGTH = 6;
 const DDGD = 0;//0:'Agribank Chi nhánh Sở giao dịch' - 1:'Agribank Chi nhánh Hà Nội' - 2:'Agribank Chi nhánh Cầu Giấy' - 3:'Agribank Chi nhánh Hà Tây'
 
-const person = {
-    fullName: 'trịnh tiến quân',
-    idNumber: '035092013752',
+let person = {
+    fullName: 'Mai Văn Tùng',
+    idNumber: '035203003891',
     issuePlace: 'cục cảnh sát qlhc về ttxh',
-    issueDate: '25/08/2021',
-    address: 'Lương Khánh Thiện, Phủ Lý, hà nam',
-    phone: '0962130922',
-    birthday: '28/10/1992',
-    email: 'trinhquanhn1992@gmail.com',
-    vietinSexIndex: 2,
+    issueDate: '31/12/2021',
+    address: 'đồng tân, tân sơn, kim bảng, hà nam',
+    phone: '0949355950',
+    birthday: '30/01/2003',
+    email: 'mai.vantung03@proton.me',//Maivantung03@
+    vietinSexIndex: 2, //2 nam 1 nu
     vietinLoaiCC: 1,
     vietinNoiGiaoDich: 1,
-    bidvAccNum: 4821813240,
+    bidvAccNum: 4823373892, //tài khoản bid
     bidvAmount: 1,
-    bidvBranch: 1,
+    bidvBranch: 1, //dia điểm giao dịch
     bidvCapital: 1,
     bidvPurpose: 2,
     bidvIssuePlace: 0,
-};
+  }
 
 async function main() {
-    try {
-        await clickButton('input[id=input-25]');
-        await new Promise(resolve => {
-            setTimeout(() => {
-                const options = document.querySelectorAll('.vue-recycle-scroller__item-view .v-list-item__title');
-                if (options[DDGD]) {
-                    options[DDGD].click();
-                }
-                resolve();
-            }, 100);
-        });
-        await clickButton('button[type="button"][step="3"].btn-main.next-step');
-        await Promise.all([...fillElements(), fillCaptcha()]);
-        await clickButton('button[data-v-5d38e429]');
-    } catch (error) {
-        console.error('Error in main function:', error);
-    }
+const now = new Date();
+const currentHour = now.getHours();
+const currentMinute = now.getMinutes();
+const currentSecond = now.getSeconds();
+
+if (currentHour === 9 && currentMinute === 0 && currentSecond === 0) {
+    // Reload page at 9:00:00 am
+    window.location.reload();
+} else {
+    // Run the automation
+    await automation();
 }
+}
+
+async function automation() {
+    try {
+      await clickButton('input[id=input-25]');
+      await new Promise(resolve => {
+        setTimeout(() => {
+          const options = document.querySelectorAll('.vue-recycle-scroller__item-view .v-list-item__title');
+          if (options[DDGD]) {
+            options[DDGD].click();
+          }
+          resolve();
+        }, 100);
+      });
+      await clickButton('button[data-v-6ba21448].btn-main.next-step');
+      await Promise.all([...fillElements(), fillCaptcha()]);
+      await clickButton('button[data-v-5d38e429].btn-main.next-step');
+    } catch (error) {
+      console.error('Error in automation:', error);
+    }
+  }
 
 function fillElements() {
     const fillInputs = [
@@ -52,7 +67,9 @@ function fillElements() {
         fillInput('input[id=input-111]', person.phone),
         fillInput('input[id=input-114]', person.idNumber),
         fillInput('input[id=input-123]', person.issuePlace),
-        fillInput('input[id=input-119]', person.issueDate, 1)
+        fillInput('input[id=input-119]', person.issueDate, 1),
+        fillInput('input[id=input-108]', person.email, 0),
+
     ];
     return [...fillInputs, checkCheckBox('input[type=checkbox]', true)];
 }
@@ -61,7 +78,7 @@ function checkCheckBox(query, checked) {
     return new Promise(resolve => {
         setTimeout(() => {
             const input = document.querySelector(query);
-            if (input) {
+            if (input && !input.checked) {
                 input.checked = checked;
                 triggerEvent(input, 'change');
             }
@@ -93,7 +110,7 @@ function fillCaptcha() {
             const img = document.querySelector('img[data-v-772eadec]');
             if (img) {
                 const base64Img = img.src.split(',')[1];
-                const input = document.getElementById('input-273');
+                const input = document.querySelector('input[id=input-131]');
                 if (input) {
                     solveCaptcha(base64Img)
                         .then(captchaText => {
@@ -108,7 +125,7 @@ function fillCaptcha() {
             } else {
                 reject('Captcha image not found');
             }
-        }, 100);
+        }, 500);
     });
 }
 
@@ -182,7 +199,7 @@ function solveCaptcha(base64Img) {
                     clearInterval(intervalId);
                     reject(error);
                 });
-            }, 1000);
+            }, 100);
         })
         .catch(error => {
             reject(error);
@@ -194,30 +211,28 @@ function triggerEvent(el, type) {
     const event = new Event(type, { bubbles: true });
     el.dispatchEvent(event);
 }
-
+  
 function startAutomation(secondEachRun, secondWaitMain) {
     let isRunning = false; // To prevent overlapping runs
-
-    const interval = setInterval(() => {
-        const now = new Date();
-        const currentHour = now.getHours();
-        const currentMinute = now.getMinutes();
-
-        if (currentHour === 9 || (currentHour === 10 && currentMinute === 0)) {
-            if (!isRunning) {
-                isRunning = true;
-                setTimeout(() => {
-                    main().finally(() => {
-                        isRunning = false;
-                    });
-                }, secondWaitMain);
-            }
+    let intervalId; // Store the interval ID
+  
+    const startInterval = () => {
+      intervalId = setInterval(() => {
+        if (!isRunning) {
+          isRunning = true;
+          automation().finally(() => {
+            isRunning = false;
+            setTimeout(() => {
+                window.location.reload(); // reload page after 1 second
+              }, 1000);
+          });
         }
-
-        if (currentHour === 10 && currentMinute > 0) {
-            clearInterval(interval);
-        }
-    }, secondEachRun);
-}
-
-startAutomation(1000,5000)
+      }, secondEachRun);
+    };
+  
+    main().finally(() => {
+      startInterval();
+    });
+  }
+  
+startAutomation(3000, 1000);
