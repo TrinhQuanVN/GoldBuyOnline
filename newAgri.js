@@ -1,4 +1,10 @@
-let person = {
+const API_KEY = '16e27e68938cdb1fc7633a9ebef359f3';
+const NUMERIC = 0;//numeric: 0 - không có yêu cầu 1 - chỉ cho phép số 2 - cho phép mọi chữ cái ngoại trừ số
+const MIN_LENGTH = 6;//vietin 5so - agribank 6 chu
+const MAX_LENGTH = 6;
+const DDGD = 0;//0:'Agribank Chi nhánh Sở giao dịch' - 1:'Agribank Chi nhánh Hà Nội' - 2:'Agribank Chi nhánh Cầu Giấy' - 3:'Agribank Chi nhánh Hà Tây'
+
+const person = {
     fullName: 'trịnh tiến quân',
     idNumber: '035092013752',
     issuePlace: 'cục cảnh sát qlhc về ttxh',
@@ -10,47 +16,28 @@ let person = {
     vietinSexIndex: 2,
     vietinLoaiCC: 1,
     vietinNoiGiaoDich: 1,
-    bidvAccNum: 4821813240, //tài khoản bid
+    bidvAccNum: 4821813240,
     bidvAmount: 1,
-    bidvBranch: 1, //dia điểm giao dịch
+    bidvBranch: 1,
     bidvCapital: 1,
     bidvPurpose: 2,
     bidvIssuePlace: 0,
-}
-
-const API_KEY = '16e27e68938cdb1fc7633a9ebef359f3';
-const NUMERIC = 0; //numeric: 0 - không có yêu cầu 1 - chỉ cho phép số 2 - cho phép mọi chữ cái ngoại trừ số
-const MIN_LENGTH = 6;//vietin 5so - agribank 6 chu
-const MAX_LENGTH = 6;
-
-const DDGD = 0 //0:'Agribank Chi nhánh Sở giao dịch' - 1:'Agribank Chi nhánh Hà Nội' - 2:'Agribank Chi nhánh Cầu Giấy' - 3:'Agribank Chi nhánh Hà Tây'
-
-document.addEventListener('DOMContentLoaded', main);
-window.addEventListener('load', main);
+};
 
 async function main() {
     try {
-        // Start step 1
         await clickButton('input[id=input-25]');
-
-        // Select dia diem
         await new Promise(resolve => {
             setTimeout(() => {
-                var options = document.querySelectorAll('.vue-recycle-scroller__item-view .v-list-item__title');
+                const options = document.querySelectorAll('.vue-recycle-scroller__item-view .v-list-item__title');
                 if (options[DDGD]) {
                     options[DDGD].click();
                 }
                 resolve();
             }, 100);
         });
-
-        // Click button to proceed to step 2
         await clickButton('button[type="button"][step="3"].btn-main.next-step');
-
-        // Start step 2
         await Promise.all([...fillElements(), fillCaptcha()]);
-        
-        // Click button to confirm
         await clickButton('button[data-v-5d38e429]');
     } catch (error) {
         console.error('Error in main function:', error);
@@ -73,7 +60,7 @@ function fillElements() {
 function checkCheckBox(query, checked) {
     return new Promise(resolve => {
         setTimeout(() => {
-            var input = document.querySelector(query);
+            const input = document.querySelector(query);
             if (input) {
                 input.checked = checked;
                 triggerEvent(input, 'change');
@@ -86,7 +73,7 @@ function checkCheckBox(query, checked) {
 function fillInput(query, value, doubleTrigger = 0) {
     return new Promise(resolve => {
         setTimeout(() => {
-            var input = document.querySelector(query);
+            const input = document.querySelector(query);
             if (input) {
                 input.focus();
                 input.value = value;
@@ -103,16 +90,18 @@ function fillInput(query, value, doubleTrigger = 0) {
 function fillCaptcha() {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            var img = document.querySelector('img[data-v-772eadec]');
+            const img = document.querySelector('img[data-v-772eadec]');
             if (img) {
-                var base64Img = img.src.split(',')[1]; // Ensure this is correct for your case
-                var input = document.getElementById('input-273');
+                const base64Img = img.src.split(',')[1];
+                const input = document.getElementById('input-273');
                 if (input) {
-                    solveCaptcha(base64Img).then(captchaText => {
-                        input.value = captchaText;
-                        triggerEvent(input, 'input');
-                        resolve();
-                    }).catch(err => reject(err));
+                    solveCaptcha(base64Img)
+                        .then(captchaText => {
+                            input.value = captchaText;
+                            triggerEvent(input, 'input');
+                            resolve();
+                        })
+                        .catch(err => reject(err));
                 } else {
                     reject('Captcha input element not found');
                 }
@@ -126,7 +115,7 @@ function fillCaptcha() {
 function clickButton(query) {
     return new Promise(resolve => {
         setTimeout(() => {
-            var button = document.querySelector(query);
+            const button = document.querySelector(query);
             if (button) {
                 button.click();
             }
@@ -137,7 +126,7 @@ function clickButton(query) {
 
 function solveCaptcha(base64Img) {
     return new Promise((resolve, reject) => {
-        let payload = {
+        const payload = {
             clientKey: API_KEY,
             task: {
                 type: 'ImageToTextTask',
@@ -184,9 +173,7 @@ function solveCaptcha(base64Img) {
                     if (data.status === 'ready') {
                         clearInterval(intervalId);
                         resolve(data.solution.text);
-                    } else if (data.status === 'processing') {
-                        // Continue checking
-                    } else {
+                    } else if (data.status !== 'processing') {
                         clearInterval(intervalId);
                         reject(`Error: ${data.errorCode}`);
                     }
@@ -195,7 +182,7 @@ function solveCaptcha(base64Img) {
                     clearInterval(intervalId);
                     reject(error);
                 });
-            }, 100); // Check every second
+            }, 1000);
         })
         .catch(error => {
             reject(error);
@@ -207,3 +194,30 @@ function triggerEvent(el, type) {
     const event = new Event(type, { bubbles: true });
     el.dispatchEvent(event);
 }
+
+function startAutomation(secondEachRun, secondWaitMain) {
+    let isRunning = false; // To prevent overlapping runs
+
+    const interval = setInterval(() => {
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+
+        if (currentHour === 9 || (currentHour === 10 && currentMinute === 0)) {
+            if (!isRunning) {
+                isRunning = true;
+                setTimeout(() => {
+                    main().finally(() => {
+                        isRunning = false;
+                    });
+                }, secondWaitMain);
+            }
+        }
+
+        if (currentHour === 10 && currentMinute > 0) {
+            clearInterval(interval);
+        }
+    }, secondEachRun);
+}
+
+startAutomation(1000,5000)
