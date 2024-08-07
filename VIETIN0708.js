@@ -42,10 +42,9 @@ let thongBao;
 let inputEmailCode;
 let now;
 let timer;
+console.log('running scrpit');
 timer = setInterval(function() {
   now = new Date();
-    console.log(now);
-  
   button = document.querySelector('.pa-btn.gh'); // Nút xác nhận xac nhap trang 1
   mxn = document.querySelector('input.bB[name="mxn"]'); // Trường nhập captcha
   thongBao = document.querySelector('.tB').innerText;//thong bao
@@ -56,14 +55,12 @@ timer = setInterval(function() {
           button.disabled = false;
         }
         button.click();
-      console.log('button trang 1 clicking');
   }
     if (!inputEmailCode.disabled) {
     console.log('email input found!');
     document.title = 'Email';
     clearInterval(timer);
     timer = setInterval(function() {
-        console.log('clicking to death');
         button = document.querySelector('.pa-btn.dh'); // Nút xác nhận trang 2
         inputEmailCode = document.querySelector('input[name="dh"]'); // Trường nhập mã email
         if(inputEmailCode.value.length>0){
@@ -71,7 +68,6 @@ timer = setInterval(function() {
           button.disabled = false;
         }
         button.click();
-        console.log('button trang 2 clicking');
         }
     },1);
     }
