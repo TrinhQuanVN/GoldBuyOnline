@@ -1,17 +1,17 @@
 //sửa thông tin ở đây
 let person = {
-  fullName: 'trịnh tiến quân',
-  idNumber: '035092013752',
+  fullName: 'Mai Văn Tùng',
+  idNumber: '035203003891',
   issuePlace: 'cục cảnh sát qlhc về ttxh',
-  issueDate: '25/08/2021',
-  address: 'Lương Khánh Thiện, Phủ Lý, hà nam',
-  phone: '0962130922',
-  birthday: '28/10/1992',
-  email: 'trinhquanhn1992@gmail.com',
-  vietinSexIndex: 2,
+  issueDate: '31/12/2021',
+  address: 'đồng tân, tân sơn, kim bảng, hà nam',
+  phone: '0949355950',
+  birthday: '30/01/2003',
+  email: 'mai.vantung03@proton.me',//Maivantung03@
+  vietinSexIndex: 2, //2 nam 1 nu
   vietinLoaiCC: 1,
   vietinNoiGiaoDich: 1,
-  bidvAccNum: 4821813240, //tài khoản bid
+  bidvAccNum: 4823373892, //tài khoản bid
   bidvAmount: 1,
   bidvBranch: 1, //dia điểm giao dịch
   bidvCapital: 1,
@@ -19,18 +19,32 @@ let person = {
   bidvIssuePlace: 0,
 }
 
-setTimeout(function() {
-  document.querySelector('input.bB[name="hvt"]').value = person.fullName //ho ten
-  document.querySelector('input.bB[name="s"]').value = person.idNumber //id number
-  document.querySelector('input.bB[name="dcc"]').value = person.issuePlace //noi cap
-  document.querySelector('input.bB[name="dctt"]').value = person.address //address
-  document.querySelector('input.bB[name="sdt"]').value = person.phone  //phone
-  document.querySelector('input.bB[name="ns"]').value= person.birthday; // ngay sinh
-  document.querySelector('input.bB.hT[name="ht"]').value = person.email //email
-  document.querySelector('input.bB.cN[name="nc"]').value = person.issueDate; // ngay cap
-  document.querySelector('select[name="l"]').selectedIndex = person.vietinLoaiCC; // chon loai can cuoc
-  document.querySelector('select[name="gt"]').selectedIndex = person.vietinSexIndex; // chon gt
-  document.querySelector('select[name="dc"]').selectedIndex = person.vietinNoiGiaoDich; // chon noi gd
+setTimeout(async function() {
+  await fillInput('input.bB[name=hvt]', person.fullName);
+  await fillInput('input.bB[name=s]', person.idNumber);
+  await fillInput('input.bB[name=dcc]', person.issuePlace);
+  await fillInput('input.bB[name=dctt]', person.address);
+  await fillInput('input.bB[name=sdt]', person.phone);
+  await fillInput('input.bB[name=ns]', person.birthday);
+  await fillInput('input.bB[name=ht]', person.email);
+  await fillInput('input.bB[name=nc]', person.issueDate);
+
+  var input = document.querySelector('select[name=l]');
+  input.selectedIndex = person.vietinLoaiCC;
+  triggerEvent(input,'input');
+  triggerEvent(input,'change');
+
+    var input = document.querySelector('select[name=gt]');
+  input.selectedIndex = person.vietinSexIndex;
+  triggerEvent(input,'input');
+  triggerEvent(input,'change');
+
+    var input = document.querySelector('select[name=dc]');
+  input.selectedIndex = person.vietinNoiGiaoDich;
+  triggerEvent(input,'input');
+  triggerEvent(input,'change');
+  
+
   document.querySelector('input.bB[name="mxn"]').focus(); // focus vao o viet capcha
   window.scrollTo(0, document.body.scrollHeight);  // Cuộn xuống cuối trang
   console.log('fill info scueess');
@@ -73,3 +87,25 @@ timer = setInterval(function() {
     }
     
 }, 1);
+
+function fillInput(query, value, doubleTrigger = 0) {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            const input = document.querySelector(query);
+            if (input) {
+                input.focus();
+                input.value = value;
+                triggerEvent(input, 'input');
+                if (doubleTrigger !== 0) {
+                    triggerEvent(input, 'change');
+                }
+            }
+            resolve();
+        }, 100);
+    });
+}
+
+function triggerEvent(el, type) {
+    const event = new Event(type, { bubbles: true });
+    el.dispatchEvent(event);
+}
