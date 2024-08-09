@@ -19,6 +19,28 @@ let person = {
   bidvIssuePlace: 0,
 }
 
+function fillInput(query, value, doubleTrigger = 0) {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            const input = document.querySelector(query);
+            if (input) {
+                input.focus();
+                input.value = value;
+                triggerEvent(input, 'input');
+                if (doubleTrigger !== 0) {
+                    triggerEvent(input, 'change');
+                }
+            }
+            resolve();
+        }, 100);
+    });
+}
+
+function triggerEvent(el, type) {
+    const event = new Event(type, { bubbles: true });
+    el.dispatchEvent(event);
+}
+
 setTimeout(async function() {
   await fillInput('input.bB[name=hvt]', person.fullName);
   await fillInput('input.bB[name=s]', person.idNumber);
@@ -88,24 +110,3 @@ timer = setInterval(function() {
     
 }, 1);
 
-function fillInput(query, value, doubleTrigger = 0) {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            const input = document.querySelector(query);
-            if (input) {
-                input.focus();
-                input.value = value;
-                triggerEvent(input, 'input');
-                if (doubleTrigger !== 0) {
-                    triggerEvent(input, 'change');
-                }
-            }
-            resolve();
-        }, 100);
-    });
-}
-
-function triggerEvent(el, type) {
-    const event = new Event(type, { bubbles: true });
-    el.dispatchEvent(event);
-}
