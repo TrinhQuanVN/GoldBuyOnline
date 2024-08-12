@@ -55,7 +55,7 @@ function fillInput(query, value, trigger = 0) {
         triggerEvent(e, 'change');
       }
       resolve();
-    }, 100);
+    }, 10);
   });
 }
 
