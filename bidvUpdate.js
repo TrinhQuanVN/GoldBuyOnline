@@ -1,4 +1,3 @@
-//------------------------------------------------- phan 1
 let person = {
   fullName: 'trịnh tiến quân',
   idNumber: '035092013752',
@@ -17,47 +16,59 @@ let person = {
   bidvCapital: 1,
   bidvPurpose: 2,
   bidvIssuePlace: 0,
+};
+
+async function main() {
+  await clickButtonWithDelay('#btnYes'); // Click 'Yes' button after a delay
+  
+  await fillInput('input[name=addREss2]', person.address);       // address2
+  await fillInput('input[name=addREss1]', person.address);       // address1
+  await fillInput('input[name=amount]', person.bidvAmount);      // amount
+  await fillInput('input[name=accTNum]', person.bidvAccNum);     // account number
+  await fillInput('input[name=cellPHone]', person.phone);        // phone number
+  await fillInput('input[name=idNUmber]', person.idNumber);      // ID number
+  await fillInput('input[name=fullNAme]', person.fullName);      // full name
+  await fillInput('input[name=isSUedate]', person.issueDate);    // issue date
+  await fillInput('input[name=birthDAy]', person.birthday);      // birthday
+  await fillInput('select[name=braNCh]', person.bidvBranch, 1);   // branch
+  await fillInput('select[name=caPItal]', person.bidvCapital, 1); // capital
+  await fillInput('select[name=puRPose]', person.bidvPurpose, 1); // purpose
+  await fillInput('select[name=isSUeplace]', person.bidvIssuePlace, 1); // issue place
+
+  await clickButtonWithDelay('ins'); // Click 'ins' element after a delay
+
+  window.scrollTo(0, document.body.scrollHeight); // scroll to bottom
 }
-//------------
-let timer;
-let e;
-function main(){
-  timer = setInterval(function(){
-    if(document.readyState === 'complete'){
-      fillInput();
-      clearInterval(timer);
-    }
-  },1)
-}
+
 function triggerEvent(el, type) {
-    const event = new Event(type, { bubbles: true });
-    el.dispatchEvent(event);
+  const event = new Event(type, { bubbles: true });
+  el.dispatchEvent(event);
 }
-function fillInput(){
-  e= document.getElementById("addREss2"); e.value = person.address;
-  triggerEvent(e,'input');
-  e= document.getElementById("addREss1"); e.value = person.address;  //address1
-  triggerEvent(e,'input');
-  e= document.getElementById("amount"); e.value = person.bidvAmount; //amount
-  triggerEvent(e,'input');
-  e= document.getElementById("accTNum"); e.value = person.bidvAccNum;  //acctnum
-  triggerEvent(e,'input');
-  e= document.getElementById("cellPHone"); e.value = person.phone;  //cellphone
-  triggerEvent(e,'input');
-  e= document.getElementById("idNUmber"); e.value = person.idNumber;  //idnumber
-  triggerEvent(e,'input');
-  e= document.getElementById("fullNAme"); e.value = person.fullName;  //full name
-  triggerEvent(e,'input');
-  e= document.getElementById("isSUedate"); e.value = person.issueDate;  //ngay cap issuedate
-  triggerEvent(e,'input');
-  e= document.getElementById("birthDAy"); e.value = person.birthday;  //birthday
-  triggerEvent(e,'input');
-  document.getElementById('btnYes').click(); //click dong y co tai khoan
-  e= document.getElementById("braNCh"); e.selectedIndex = person.bidvBranch; triggerEvent(e, 'change'); //branch dia diem giao dich
-  e= document.getElementById("caPItal"); e.selectedIndex = person.bidvCapital; triggerEvent(e, 'change'); //capital
-  e= document.getElementById("puRPose"); e.selectedIndex = person.bidvPurpose; triggerEvent(e, 'change'); //purpose
-  e= document.getElementById("isSUeplace"); e.selectedIndex = person.bidvIssuePlace; triggerEvent(e, 'change'); //issueplace
-  document.querySelector('ins').click();
-  window.scrollTo(0, document.body.scrollHeight);// Cuộn xuống cuối trang
+
+function fillInput(query, value, trigger = 0) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const e = document.querySelector(query);
+      e.value = value;
+      triggerEvent(e, 'input');
+      if (trigger > 0) {
+        triggerEvent(e, 'change');
+      }
+      resolve();
+    }, 100);
+  });
 }
+
+function clickButtonWithDelay(selector, delay = 100) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const button = document.querySelector(selector);
+      if (button) {
+        button.click();
+      }
+      resolve();
+    }, delay);
+  });
+}
+
 main();
