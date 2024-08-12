@@ -34,15 +34,24 @@ function triggerEvent(el, type) {
     el.dispatchEvent(event);
 }
 function fillInput(){
-  e= document.getElementById("addREss2"); e.value = person.address;   //address2
+  e= document.getElementById("addREss2"); e.value = person.address;
+  triggerEvent(e,'input');
   e= document.getElementById("addREss1"); e.value = person.address;  //address1
+  triggerEvent(e,'input');
   e= document.getElementById("amount"); e.value = person.bidvAmount; //amount
+  triggerEvent(e,'input');
   e= document.getElementById("accTNum"); e.value = person.bidvAccNum;  //acctnum
+  triggerEvent(e,'input');
   e= document.getElementById("cellPHone"); e.value = person.phone;  //cellphone
+  triggerEvent(e,'input');
   e= document.getElementById("idNUmber"); e.value = person.idNumber;  //idnumber
+  triggerEvent(e,'input');
   e= document.getElementById("fullNAme"); e.value = person.fullName;  //full name
+  triggerEvent(e,'input');
   e= document.getElementById("isSUedate"); e.value = person.issueDate;  //ngay cap issuedate
+  triggerEvent(e,'input');
   e= document.getElementById("birthDAy"); e.value = person.birthday;  //birthday
+  triggerEvent(e,'input');
   document.getElementById('btnYes').click(); //click dong y co tai khoan
   e= document.getElementById("braNCh"); e.selectedIndex = person.bidvBranch; triggerEvent(e, 'change'); //branch dia diem giao dich
   e= document.getElementById("caPItal"); e.selectedIndex = person.bidvCapital; triggerEvent(e, 'change'); //capital
