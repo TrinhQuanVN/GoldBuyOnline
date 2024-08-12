@@ -18,26 +18,43 @@ let person = {
   bidvIssuePlace: 0,
 };
 
-async function main() {
-  await clickButtonWithDelay('#btnYes'); // Click 'Yes' button after a delay
-  
-  await fillInput('input[name=addREss2]', person.address);       // address2
-  await fillInput('input[name=addREss1]', person.address);       // address1
-  await fillInput('input[name=amount]', person.bidvAmount);      // amount
-  await fillInput('input[name=accTNum]', person.bidvAccNum);     // account number
-  await fillInput('input[name=cellPHone]', person.phone);        // phone number
-  await fillInput('input[name=idNUmber]', person.idNumber);      // ID number
-  await fillInput('input[name=fullNAme]', person.fullName);      // full name
-  await fillInput('input[name=isSUedate]', person.issueDate);    // issue date
-  await fillInput('input[name=birthDAy]', person.birthday);      // birthday
-  await fillInput('select[name=braNCh]', person.bidvBranch, 1);   // branch
-  await fillInput('select[name=caPItal]', person.bidvCapital, 1); // capital
-  await fillInput('select[name=puRPose]', person.bidvPurpose, 1); // purpose
-  await fillInput('select[name=isSUeplace]', person.bidvIssuePlace, 1); // issue place
 
-  await clickButtonWithDelay('ins'); // Click 'ins' element after a delay
+setInterval(()=> {});
+  clickButtonWithDelay('#btnYes'); // Click 'Yes' button after a delay
+  
+  fillInput('input[name=addREss2]', person.address);       // address2
+  fillInput('input[name=addREss1]', person.address);       // address1
+  fillInput('input[name=amount]', person.bidvAmount);      // amount
+  fillInput('input[name=accTNum]', person.bidvAccNum);     // account number
+  fillInput('input[name=cellPHone]', person.phone);        // phone number
+  fillInput('input[name=idNUmber]', person.idNumber);      // ID number
+   fillInput('input[name=fullNAme]', person.fullName);      // full name
+   fillInput('input[name=isSUedate]', person.issueDate);    // issue date
+   fillInput('input[name=birthDAy]', person.birthday);      // birthday
+   fillInput('select[name=braNCh]', person.bidvBranch, 1);   // branch
+   fillInput('select[name=caPItal]', person.bidvCapital, 1); // capital
+   fillInput('select[name=puRPose]', person.bidvPurpose, 1); // purpose
+   fillInput('select[name=isSUeplace]', person.bidvIssuePlace, 1); // issue place
+
+   clickButtonWithDelay('ins'); // Click 'ins' element after a delay
 
   window.scrollTo(0, document.body.scrollHeight); // scroll to bottom
+
+
+if(document.getElementById('caPItal')){
+    fillInput('select[name=braNCh]', person.bidvBranch, 1);   // branch
+   fillInput('select[name=caPItal]', person.bidvCapital, 1); // capital
+   fillInput('select[name=puRPose]', person.bidvPurpose, 1); // purpose
+   fillInput('select[name=isSUeplace]', person.bidvIssuePlace, 1); // issue place
+  
+  function fillInput(query, value, trigger = 0) {
+  const e = document.querySelector(query);
+  e.value = value;
+  triggerEvent(e, 'input');
+  if (trigger > 0) {
+    triggerEvent(e, 'change');
+  }
+}
 }
 
 function triggerEvent(el, type) {
@@ -46,29 +63,18 @@ function triggerEvent(el, type) {
 }
 
 function fillInput(query, value, trigger = 0) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const e = document.querySelector(query);
-      e.value = value;
-      triggerEvent(e, 'input');
-      if (trigger > 0) {
-        triggerEvent(e, 'change');
-      }
-      resolve();
-    }, 10);
-  });
+  const e = document.querySelector(query);
+  e.value = value;
+  triggerEvent(e, 'input');
+  if (trigger > 0) {
+    triggerEvent(e, 'change');
+  }
 }
 
 function clickButtonWithDelay(selector, delay = 100) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const button = document.querySelector(selector);
-      if (button) {
-        button.click();
-      }
-      resolve();
-    }, delay);
-  });
+  const button = document.querySelector(selector);
+  if (button) {
+    button.click();
+  }
 }
 
-main();
