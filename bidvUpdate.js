@@ -34,20 +34,20 @@ function triggerEvent(el, type) {
     el.dispatchEvent(event);
 }
 function fillInput(){
-  e= document.getElementById("address2"); e.value = person.address;   //address2
-  e= document.getElementById("address1"); e.value = person.address;  //address1
+  e= document.getElementById("addREss2"); e.value = person.address;   //address2
+  e= document.getElementById("addREss1"); e.value = person.address;  //address1
   e= document.getElementById("amount"); e.value = person.bidvAmount; //amount
-  e= document.getElementById("acctnum"); e.value = person.bidvAccNum;  //acctnum
-  e= document.getElementById("cellphone"); e.value = person.phone;  //cellphone
-  e= document.getElementById("idnumber"); e.value = person.idNumber;  //idnumber
-  e= document.getElementById("fullname"); e.value = person.fullName;  //full name
-  e= document.getElementById("issuedate"); e.value = person.issueDate;  //ngay cap issuedate
-  e= document.getElementById("birthday"); e.value = person.birthday;  //birthday
+  e= document.getElementById("accTNum"); e.value = person.bidvAccNum;  //acctnum
+  e= document.getElementById("cellPHone"); e.value = person.phone;  //cellphone
+  e= document.getElementById("idNUmber"); e.value = person.idNumber;  //idnumber
+  e= document.getElementById("fullNAme"); e.value = person.fullName;  //full name
+  e= document.getElementById("isSUedate"); e.value = person.issueDate;  //ngay cap issuedate
+  e= document.getElementById("birthDAy"); e.value = person.birthday;  //birthday
   document.getElementById('btnYes').click(); //click dong y co tai khoan
-  e= document.getElementById("branch"); e.selectedIndex = person.bidvBranch; triggerEvent(e, 'change'); //branch dia diem giao dich
-  e= document.getElementById("capital"); e.selectedIndex = person.bidvCapital; triggerEvent(e, 'change'); //capital
-  e= document.getElementById("purpose"); e.selectedIndex = person.bidvPurpose; triggerEvent(e, 'change'); //purpose
-  e= document.getElementById("issueplace"); e.selectedIndex = person.bidvIssuePlace; triggerEvent(e, 'change'); //issueplace
+  e= document.getElementById("braNCh"); e.selectedIndex = person.bidvBranch; triggerEvent(e, 'change'); //branch dia diem giao dich
+  e= document.getElementById("caPItal"); e.selectedIndex = person.bidvCapital; triggerEvent(e, 'change'); //capital
+  e= document.getElementById("puRPose"); e.selectedIndex = person.bidvPurpose; triggerEvent(e, 'change'); //purpose
+  e= document.getElementById("isSUeplace"); e.selectedIndex = person.bidvIssuePlace; triggerEvent(e, 'change'); //issueplace
   document.querySelector('ins').click();
   window.scrollTo(0, document.body.scrollHeight);// Cuộn xuống cuối trang
 }
