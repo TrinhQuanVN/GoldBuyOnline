@@ -347,3 +347,24 @@ let person = {
   bidvPurpose: 2,
   bidvIssuePlace: 0,
 }
+--------------Nguyễn Minh Đức
+let person = {
+  fullName:’, 'Nguyễn Minh Đức'
+  idNumber: '035206005143',
+  issuePlace: 'cục cảnh sát qlhc về ttxh',
+  issueDate: '25/08/2021',
+  address: 'Tổ 3 thị trấn Quế, Kim Bảng, Hà Nam ',
+  phone: '0852647162',
+  birthday: '30/04/2006',
+  email: 'minhduc30042006@gmail.com ',//Maivantung03@
+  vietinSexIndex: 2, //2 nam 1 nu
+  vietinLoaiCC: 1,
+  vietinNoiGiaoDich: 1,
+  bidvAccNum: 8823642589, //tài khoản bid
+  bidvAmount: 1,
+  bidvBranch: 1, //dia điểm giao dịch
+  bidvCapital: 1,
+  bidvPurpose: 2,
+  bidvIssuePlace: 0,
+}
+
