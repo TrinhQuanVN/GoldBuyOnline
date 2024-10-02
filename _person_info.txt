@@ -349,7 +349,7 @@ let person = {
 }
 --------------Nguyễn Minh Đức
 let person = {
-  fullName:’, 'Nguyễn Minh Đức'
+  fullName:’, 'Nguyễn Minh Đức',
   idNumber: '035206005143',
   issuePlace: 'cục cảnh sát qlhc về ttxh',
   issueDate: '25/08/2021',
