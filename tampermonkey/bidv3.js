@@ -93,6 +93,23 @@
         triggerEvent(e, 'input');
         triggerEvent(e, 'change');
     }
+    
+    function disableBlockAutoFill() {
+        // Override blockAutoFill if it exists
+        window.onload = function() {
+            if (typeof blockAutoFill === 'function') {
+                blockAutoFill = function() {
+                    // Empty function to disable it
+                };
+            }
+
+            // If inputs were already disabled, re-enable them
+            const inputs = document.querySelectorAll('input[disabled]');
+            inputs.forEach(function(input) {
+                input.removeAttribute('disabled'); // Enable the input
+            });
+        };
+    }
 
     function focusCaptchaInput() {
         const captchaInput = document.getElementById('capTCha');
@@ -124,6 +141,7 @@
     }
 
     // Run the main function
+    disableBlockAutoFill();
     main();
 
 })();
