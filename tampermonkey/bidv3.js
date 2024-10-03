@@ -109,6 +109,18 @@
                 }
             });
         }
+        const otpInput = document.getElementById('otpcode');
+        if (otpInput) {
+            otpInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    const submitButton = document.querySelector('.btn.btn-blue.finish-step.btn-block'); //btn btn-blue finish-step btn-block
+                    if (submitButton) {
+                        submitButton.click();
+                    }
+                }
+            });
+        }
     }
 
     // Run the main function
