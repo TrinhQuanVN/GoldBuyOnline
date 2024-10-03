@@ -95,20 +95,14 @@
     }
     
     function disableBlockAutoFill() {
-        // Override blockAutoFill if it exists
-        window.onload = function() {
-            if (typeof blockAutoFill === 'function') {
-                blockAutoFill = function() {
-                    // Empty function to disable it
-                };
-            }
-
-            // If inputs were already disabled, re-enable them
-            const inputs = document.querySelectorAll('input[disabled]');
-            inputs.forEach(function(input) {
-                input.removeAttribute('disabled'); // Enable the input
-            });
-        };
+       const proto = Object.getPrototypeOf(window);
+        
+        if (proto && typeof proto.blockAutoFill === 'function') {
+            proto.blockAutoFill = function() {
+                // Overwrite the original function to do nothing
+                console.log('blockAutoFill disabled on prototype level.');
+            };
+        }
     }
 
     function focusCaptchaInput() {
