@@ -367,4 +367,23 @@ let person = {
   bidvPurpose: 2,
   bidvIssuePlace: 0,
 }
-
+--------------đặng thị thảo
+let person = {
+        fullName: 'đặng thị thảo',
+        idNumber: '035189003516',
+        issuePlace: 'cục cảnh sát qlhc về ttxh',
+        issueDate: '09/08/2021',
+        address: 'thường ấm tiên hải phủ lý, Hà Nam ',
+        phone: '0979805218',
+        birthday: '21/11/1989',
+        email: 'thao211188@gmail.com ',//Maivantung03@
+        vietinSexIndex: 2, //2 nam 1 nu
+        vietinLoaiCC: 1,
+        vietinNoiGiaoDich: 1,
+        bidvAccNum: 8842650201, //tài khoản bid
+        bidvAmount: 1,
+        bidvBranch: 1, //dia điểm giao dịch
+        bidvCapital: 1,
+        bidvPurpose: 2,
+        bidvIssuePlace: 0,
+    };
