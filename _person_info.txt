@@ -387,3 +387,23 @@ let person = {
         bidvPurpose: 2,
         bidvIssuePlace: 0,
     };
+--------------hoàng ngọc bích
+let person = {
+        fullName: 'hoàng ngọc bích',
+        idNumber: '035063002418',
+        issuePlace: 'cục cảnh sát qlhc về ttxh',
+        issueDate: '14/06/2023',
+        address: 'tổ 3 thị trấn quế, kim bảng, Hà Nam ',
+        phone: '0913386714',
+        birthday: '05/07/1963',
+        email: 'bichhn.ubnd@gmail.com ',//Maivantung03@
+        vietinSexIndex: 2, //2 nam 1 nu
+        vietinLoaiCC: 1,
+        vietinNoiGiaoDich: 1,
+        bidvAccNum: 4820047985, //tài khoản bid
+        bidvAmount: 1,
+        bidvBranch: 1, //dia điểm giao dịch
+        bidvCapital: 1,
+        bidvPurpose: 2,
+        bidvIssuePlace: 0,
+    };
