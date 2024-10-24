@@ -135,7 +135,7 @@
     }
 
     // Run the main function
-    disableBlockAutoFill();
+    //disableBlockAutoFill();
     main();
 
 })();
