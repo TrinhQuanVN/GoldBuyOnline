@@ -164,7 +164,7 @@ function getBase64Image() {
 async function solveCaptcha(base64Img) {
     const apiUrl = "https://anticaptcha.top/api/captcha";
     const payload = {
-        apikey: "YOUR_API_KEY", // Replace with your actual API key
+        apikey: "796b02353453441eb50179e374758059", // Replace with your actual API key
         img: base64Img,
         type: 32
     };
@@ -188,9 +188,6 @@ async function solveCaptcha(base64Img) {
         console.error("Error:", error);
     }
 }
-
-
-  
       main();
       
 })();
