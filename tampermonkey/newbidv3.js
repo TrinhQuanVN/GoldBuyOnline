@@ -32,6 +32,8 @@
     };
 
     async function main() {
+    // Fill input fields in one promise
+    const fillInputsPromise = (async () => {
         await fillInput('input[name=addREss2]', person.address); // address2
         await fillInput('input[name=addREss1]', person.address); // address1
         await fillInput('input[name=aMOunt]', person.bidvAmount); // amount
@@ -50,16 +52,38 @@
         await selectSelector('select[name=isSUeplace]', person.bidvIssuePlace); // issue place
 
         await clickButtonWithDelay('ins', 10); // Click 'ins' element after a delay
+    })();
 
-        window.scrollTo(0, document.body.scrollHeight); // scroll to bottom
+    // Solve captcha in another promise
+    const base64Image = await getCaptchaBase64(); // Ensure the captcha is retrieved after the image loads
+    const solveCaptchaPromise = solveCaptcha(base64Image); // Solve CAPTCHA
 
-        focusCaptchaInput(); // Focus on CAPTCHA input when the page loads
-    }
+    // Wait for both tasks to complete
+    const [_, captchaText] = await Promise.all([fillInputsPromise, solveCaptchaPromise]);
+
+    // Fill the captcha input
+    await fillInput('input[name=capTCha]', captchaText); // Fill the captcha input
+
+    // Click the button
+    await clickButton('button.g-recaptcha.btn.btn-blue.next-step.btn-block'); // Click the next step button
+}
+
 
     function triggerEvent(el, type) {
         const event = new Event(type, { bubbles: true });
         el.dispatchEvent(event);
     }
+    function clickButton(query) {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    const button = document.querySelector(query);
+                    if (button) {
+                        button.click();
+                    }
+                    resolve();
+                }, 100);
+            });
+        }
 
     function fillInput(query, value, trigger = 0) {
         return new Promise((resolve) => {
@@ -105,35 +129,83 @@
         }
     }
 
-    function focusCaptchaInput() {
-        const captchaInput = document.getElementById('capTCha');
-        if (captchaInput) {
-            captchaInput.focus();
+    // function focusCaptchaInput() {
+    //     const captchaInput = document.getElementById('capTCha');
+    //     if (captchaInput) {
+    //         captchaInput.focus();
 
-            captchaInput.addEventListener('keydown', function(event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    const submitButton = document.querySelector('.g-recaptcha.btn.btn-blue.next-step.btn-block');
-                    if (submitButton) {
-                        submitButton.click();
-                    }
-                }
-            });
+    //         captchaInput.addEventListener('keydown', function(event) {
+    //             if (event.key === 'Enter') {
+    //                 event.preventDefault();
+    //                 const submitButton = document.querySelector('.g-recaptcha.btn.btn-blue.next-step.btn-block');
+    //                 if (submitButton) {
+    //                     submitButton.click();
+    //                 }
+    //             }
+    //         });
+    //     }
+    //     const otpInput = document.getElementById('otpcode');
+    //     if (otpInput) {
+    //         otpInput.addEventListener('keydown', function(event) {
+    //             if (event.key === 'Enter') {
+    //                 event.preventDefault();
+    //                 const submitButton = document.querySelector('.btn.btn-blue.finish-step.btn-block'); //btn btn-blue finish-step btn-block
+    //                 if (submitButton) {
+    //                     submitButton.click();
+    //                 }
+    //             }
+    //         });
+    //     }
+    // }
+
+    async function getCaptchaBase64() {
+    // Get the captcha image element
+    const img = document.getElementById('captchaImg');
+
+    // Create a canvas element
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Set the canvas dimensions to match the image
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    // Draw the image onto the canvas
+    ctx.drawImage(img, 0, 0);
+
+    // Get the base64-encoded image data
+    const base64Img = canvas.toDataURL('image/png').split(',')[1]; // Remove the data URL prefix
+
+    return base64Img; // Returns the base64 string
+}
+    
+async function solveCaptcha(base64Img) {
+    const apiUrl = "https://anticaptcha.top/api/captcha";
+    const payload = {
+        apikey: "796b02353453441eb50179e374758059", // Replace with your actual API key
+        img: base64Img,
+        type: 32
+    };
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            return data.captcha; // Return the solved captcha text
+        } else {
+            throw new Error("Captcha solving failed: " + data.message);
         }
-        const otpInput = document.getElementById('otpcode');
-        if (otpInput) {
-            otpInput.addEventListener('keydown', function(event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    const submitButton = document.querySelector('.btn.btn-blue.finish-step.btn-block'); //btn btn-blue finish-step btn-block
-                    if (submitButton) {
-                        submitButton.click();
-                    }
-                }
-            });
-        }
+    } catch (error) {
+        console.error("Error:", error);
     }
-
+}
     // Run the main function
     //disableBlockAutoFill();
     main();
