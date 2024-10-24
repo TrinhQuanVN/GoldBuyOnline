@@ -32,32 +32,50 @@
     bidvIssuePlace: 0,
   }
       async function main() {
-        await performClickActions();
-        const jsonData = await listenAndCaptureRequest(); // Step 1: Capture the request
-        const base64Image = handleJsonAndExtractImage(jsonData); // Step 2: Handle JSON and extract base64 image
-        const captchaText = await solveCaptcha(base64Image); // Step 3: Solve the CAPTCHA
+    await performClickActions();
 
+    // Start solving the CAPTCHA and filling the inputs along with checkbox checking in parallel
+    const base64Img = getBase64Image();
+    
+    const solveCaptchaPromise = solveCaptcha(base64Img);  // solving CAPTCHA
+    const fillInputsPromise = (async () => {
         await fillInput('input[id=input-96]', person.fullName);
-        await fillInput('input[id=input-101]', person.birthday,1);
+        await fillInput('input[id=input-101]', person.birthday, 1);
         await fillInput('input[id=input-105]', person.address);
         await fillInput('input[id=input-108]', person.email);
         await fillInput('input[id=input-111]', person.phone);
         await fillInput('input[id=input-114]', person.idNumber);
         await fillInput('input[id=input-123]', person.issuePlace);
         await fillInput('input[id=input-119]', person.issueDate);
-        
-        await fillInput('input[id=input-119]', captchaText);//captcha
 
+        // Check the checkbox concurrently with filling inputs
         await checkCheckbox();
+    })();
 
-        ClickButtonSumit();
+    // Wait for both CAPTCHA solving and input filling with checkbox checking to finish
+    const [captchaText] = await Promise.all([solveCaptchaPromise, fillInputsPromise]);
 
-      }
+    // Fill the CAPTCHA input
+    await fillInput('input[id=input-131]', captchaText);
+
+    // Click the button
+    await clickButton('button[data-v-5d38e429].btn-main.next-step');
+}
       function triggerEvent(el, type) {
         const event = new Event(type, { bubbles: true });
         el.dispatchEvent(event);
       }
-
+        function clickButton(query) {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    const button = document.querySelector(query);
+                    if (button) {
+                        button.click();
+                    }
+                    resolve();
+                }, 100);
+            });
+        }
       function checkCheckbox() {
         return new Promise((resolve, reject) => {
           const checkbox = document.querySelector('input[type=checkbox]');
@@ -132,61 +150,42 @@
           }, 100);
         });
       }
-async function listenAndCaptureRequest() {
-    return new Promise((resolve, reject) => {
-        // Intercept fetch or XMLHttpRequest (based on the website's request method)
-        const originalFetch = window.fetch;
-        window.fetch = async function (...args) {
-            const response = await originalFetch.apply(this, args);
-            
-            const url = args[0];
-            if (url.includes('https://j8ki3b991l.execute-api.ap-southeast-1.amazonaws.com/production/generate-captcha')) {
-                const clonedResponse = response.clone(); // Clone response to read it multiple times
-                clonedResponse.json().then(data => {
-                    if (response.status === 200 && data.image && data.id) {
-                        resolve(data); // Return the JSON body if status is 200
-                    } else {
-                        reject('Invalid response data');
-                    }
-                }).catch(err => reject(err));
-            }
-            
-            return response;
-        };
-    });
+function getBase64Image() {
+    const img = document.querySelector('img[data-v-772eadec]');
+    if (img && img.src.includes(',')) {
+        const base64Img = img.src.split(',')[1];
+        return base64Img;
+    } else {
+        throw new Error("Image not found or invalid source.");
+    }
 }
 
-// 2. Function to handle the JSON and extract the base64 image
-function handleJsonAndExtractImage(jsonData) {
-    const base64Image = jsonData.image.split(",")[1]; // Extract only the base64 part
-    return base64Image; // Return the base64 string of the image
-}
 
-// 3. Function to solve the CAPTCHA using the base64 image
-async function solveCaptcha(base64Image) {
-    const apiUrl = 'https://anticaptcha.top/api/captcha';
-    const apiKey = 'YOUR_API_KEY'; // Replace with your API key
-
-    const body = {
-        "apikey": apiKey,
-        "img": base64Image,
-        "type": 32
+async function solveCaptcha(base64Img) {
+    const apiUrl = "https://anticaptcha.top/api/captcha";
+    const payload = {
+        apikey: "YOUR_API_KEY", // Replace with your actual API key
+        img: base64Img,
+        type: 32
     };
 
-    const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-    });
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
 
-    const result = await response.json();
-
-    if (result.success) {
-        return result.captcha; // Return the CAPTCHA result (e.g., '764NHK')
-    } else {
-        throw new Error('Captcha solving failed');
+        const data = await response.json();
+        if (data.success) {
+            return data.captcha; // Return the solved captcha text
+        } else {
+            throw new Error("Captcha solving failed: " + data.message);
+        }
+    } catch (error) {
+        console.error("Error:", error);
     }
 }
 
