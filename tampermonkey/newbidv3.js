@@ -118,16 +118,16 @@
         triggerEvent(e, 'change');
     }
     
-    function disableBlockAutoFill() {
-       const proto = Object.getPrototypeOf(window);
+    // function disableBlockAutoFill() {
+    //    const proto = Object.getPrototypeOf(window);
         
-        if (proto && typeof proto.blockAutoFill === 'function') {
-            proto.blockAutoFill = function() {
-                // Overwrite the original function to do nothing
-                console.log('blockAutoFill disabled on prototype level.');
-            };
-        }
-    }
+    //     if (proto && typeof proto.blockAutoFill === 'function') {
+    //         proto.blockAutoFill = function() {
+    //             // Overwrite the original function to do nothing
+    //             console.log('blockAutoFill disabled on prototype level.');
+    //         };
+    //     }
+    // }
 
     // function focusCaptchaInput() {
     //     const captchaInput = document.getElementById('capTCha');
@@ -184,7 +184,7 @@ async function solveCaptcha(base64Img) {
     const payload = {
         apikey: "796b02353453441eb50179e374758059", // Replace with your actual API key
         img: base64Img,
-        type: 32
+        type: 31//bidv
     };
 
     try {
