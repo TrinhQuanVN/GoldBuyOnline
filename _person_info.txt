@@ -71,7 +71,7 @@ let person = {
   vietinSexIndex: 2,
   vietinLoaiCC: 1,
   vietinNoiGiaoDich: 1,
-  bidvAccNum: 4821813240, //tài khoản bid
+  bidvAccNum: 8802612182, //tài khoản bid
   bidvAmount: 1,
   bidvBranch: 1, //dia điểm giao dịch
   bidvCapital: 1,
