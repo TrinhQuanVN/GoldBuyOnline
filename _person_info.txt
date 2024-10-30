@@ -65,7 +65,7 @@ let person = {
   issuePlace: 'cục cảnh sát qlhc về ttxh',
   issueDate: '09/04/2021',
   address: 'Khương Mai, Thanh Xuân, Hà Nội',
-  phone: '0989575578',
+  phone: '0968871991',
   birthday: '12/09/1991',
   email: 'phanthe.catx@gmail.com',// Th3ph@n91
   vietinSexIndex: 2,
