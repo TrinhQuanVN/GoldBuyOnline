@@ -1,4 +1,5 @@
 ﻿using Microsoft.Playwright;
+using Microsoft.VisualBasic;
 using System.Text;
 using System.Text.Json;
 
@@ -30,86 +31,71 @@ namespace BuyGolgBidv
 
             ShowTimeNow();
             PrintMessage.Information($"Hello {userInfo.Name}");
-
-            if(await pageSjc.AccessLoginPage(page))
-            {
-                PrintMessage.Success("access success");
-            }
-                
-            await Task.Delay(1000);
-            await pageSjc.Reload(page);
-            await Task.Delay(2000);
-
-            await pageSjc.Login(page, userInfo);
-            
-
-            //while(!await pageSjc.IsLoginSuccess(page))
-            //{
-            //    await Task.Delay(2000);
-            //    await pageSjc.Reload(page);
-            //    await pageSjc.Login(page, userInfo);
-            //}
-
-            PrintMessage.Success("login success");
-
-            var counter = GetTimeRegister();
-            //check if area open
-            var count = 0;
-            while (!await pageSjc.IsAreaOpen(page))
-            {
-                
-                await pageSjc.Reload(page);
-                PrintMessage.Information(pageSjc.AreaName + $" is not opened x {count}");
-
-                count++;
-            }
-
-            //register gold
-            while (counter > 0)
-            {
-                await pageSjc.Reload(page);
-                await pageSjc.ChangeStoreIndex(page);
-
-                await pageSjc.Register(page);
-
-                PrintMessage.Information($"register buying sjc time x {counter}");
-                counter--;
-            }
-            PrintMessage.Information($"Screen shoot is save to {pageSjc.ScreenShotFolder()}");
+            await Run(page, pageSjc, userInfo);
 
             Console.ReadKey();
 
             await browser.CloseAsync();
         }
-        private static int GetTimeRegister()
+        private static async Task Run(IPage page, PageSJCV pageSJC,UserInfo userInfo)
         {
-            PrintMessage.Information("enter number of register time: ");
-            var counter = 0;
-            var input = Console.ReadLine();
-            while (!int.TryParse(input, out counter))
+            var folderPath = pageSJC.ScreenShotFolder();
+            
+            if(!await pageSJC.AccessLoginPage(page))
             {
-                PrintMessage.Error("number not correct!. Try again");
-                input = Console.ReadLine();
+                PrintMessage.Error("Access login page fail!");
+                Console.ReadKey();
+                return;
             }
-            return counter;
+            await Task.Delay(2000);
+            if(await pageSJC.ReloadAndCheckPageError404(page))
+            {
+                PrintMessage.Error("Page got error 404");
+                return;
+            }
+            
+
+            await pageSJC.Login(page,userInfo);
+
+            
+            if (!pageSJC.IsLoginSuccess(await pageSJC.GetSourceCode(page)))
+            {
+                PrintMessage.Error("Login fail!");
+                return;
+            }
+            PrintMessage.Success("Login success!");
+
+            var sourceCode = await pageSJC.GetSourceCode(page);
+            while (!pageSJC.IsAreaOpen(sourceCode))
+            {
+               if(await pageSJC.ReloadAndCheckPageError404(page))
+                {
+                    PrintMessage.Error("Page got error 404");
+                    return;
+                }
+               sourceCode = await pageSJC.GetSourceCode(page);
+                
+                PrintMessage.Error($"{pageSJC.AreaName} isn't opened");
+                await Task.Delay(1000);
+            }
+            while (!await pageSJC.Register(page))
+            {
+                PrintMessage.Information("Register fail");
+
+                await Task.Delay(1000);
+
+                if(await pageSJC.ReloadAndCheckPageError404(page))
+                {
+                    PrintMessage.Error("Error 404");
+                    return;
+                }
+            }
+            await pageSJC.TakeScreenShot(page, pageSJC.CreateScreenShotPath(folderPath));
+            PrintMessage.Success($"Register succesfull");
         }
         private static void ShowTimeNow()
         {
             PrintMessage.Information($"Time now is {DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")}");
-        }
-        static void RemoveLastConsoleLine()
-        {
-            if (Console.CursorTop > 0)
-            {
-                // Move the cursor up by one line
-                Console.SetCursorPosition(0, Console.CursorTop - 1);
-
-                // Overwrite the line with spaces to clear it
-                Console.Write(new string(' ', Console.WindowWidth));
-
-                // Move the cursor back to the start of that line
-                Console.SetCursorPosition(0, Console.CursorTop - 1);
-            }
         }
     }
 }

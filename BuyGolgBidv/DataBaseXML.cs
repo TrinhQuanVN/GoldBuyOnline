@@ -9,7 +9,7 @@ namespace BuyGolgBidv
 {
     public class DataBaseXML
     {
-        public PageSJC PageSJC { get; set; }
+        public PageSJCV PageSJC { get; set; }
         public UserInfo UserInfo { get; set; }
 
         public async Task LoadFromXmlAsync(string filePath)
@@ -35,7 +35,7 @@ namespace BuyGolgBidv
     [XmlRoot("Data")]
     public class DataBaseXmlWrapper
     {
-        public PageSJC PageSJC { get; set; }
+        public PageSJCV PageSJC { get; set; }
         public UserInfo UserInfo { get; set; }
     }
 }

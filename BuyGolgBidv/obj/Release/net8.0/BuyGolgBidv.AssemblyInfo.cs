@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BuyGolgBidv")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4da80ab338476e656589f8b3b77a2c81a423dbc0")]
 [assembly: System.Reflection.AssemblyProductAttribute("BuyGolgBidv")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BuyGolgBidv")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
