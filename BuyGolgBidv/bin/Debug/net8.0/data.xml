@@ -1,0 +1,18 @@
+<Data>
+  <PageSJC>
+    <QueryNameLogin>#id_name</QueryNameLogin>
+    <QueryCccdLogin>#id_cccd</QueryCccdLogin>
+    <QueryButtonLogin>#sign_in_submit</QueryButtonLogin>
+    <QueryAreaOption>#id_area</QueryAreaOption>
+    <QueryStoreOption>#id_store</QueryStoreOption>
+    <QueryButtonRegister>#register_form_submit</QueryButtonRegister>
+    <AreaName>Thành phố Hà Nội</AreaName>
+    <UrlLogin>https://tructuyen.sjc.com.vn/dang-nhap</UrlLogin>
+    <ApiAntiCaptchaTop>796b02353453441eb50179e374758059</ApiAntiCaptchaTop>
+    <UrlRegister>https://tructuyen.sjc.com.vn/</UrlRegister>
+  </PageSJC>
+  <UserInfo>
+    <Name>Phan Cao Thế</Name>
+    <CCCD>001091036739</CCCD>
+  </UserInfo>
+</Data>

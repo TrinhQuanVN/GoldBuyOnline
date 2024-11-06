@@ -31,13 +31,20 @@ namespace BuyGolgBidv
 
             ShowTimeNow();
             PrintMessage.Information($"Hello {userInfo.Name}");
-            await Run(page, pageSjc, userInfo);
+
+
+            
+            //await Task.Delay(900000);
+            while (!await Run(page, pageSjc, userInfo))
+            {
+                PrintMessage.Information("Register fail");
+            }
 
             Console.ReadKey();
 
             await browser.CloseAsync();
         }
-        private static async Task Run(IPage page, PageSJCV pageSJC,UserInfo userInfo)
+        private static async Task<bool> Run(IPage page, PageSJCV pageSJC,UserInfo userInfo)
         {
             var folderPath = pageSJC.ScreenShotFolder();
             
@@ -45,13 +52,13 @@ namespace BuyGolgBidv
             {
                 PrintMessage.Error("Access login page fail!");
                 Console.ReadKey();
-                return;
+                return false;
             }
             await Task.Delay(2000);
             if(await pageSJC.ReloadAndCheckPageError404(page))
             {
                 PrintMessage.Error("Page got error 404");
-                return;
+                return false;
             }
             
 
@@ -61,7 +68,7 @@ namespace BuyGolgBidv
             if (!pageSJC.IsLoginSuccess(await pageSJC.GetSourceCode(page)))
             {
                 PrintMessage.Error("Login fail!");
-                return;
+                return false;
             }
             PrintMessage.Success("Login success!");
 
@@ -71,31 +78,50 @@ namespace BuyGolgBidv
                if(await pageSJC.ReloadAndCheckPageError404(page))
                 {
                     PrintMessage.Error("Page got error 404");
-                    return;
+                    return false;
                 }
                sourceCode = await pageSJC.GetSourceCode(page);
                 
                 PrintMessage.Error($"{pageSJC.AreaName} isn't opened");
-                await Task.Delay(1000);
+                //await Task.Delay(1000);
             }
+
             while (!await pageSJC.Register(page))
             {
-                PrintMessage.Information("Register fail");
-
-                await Task.Delay(1000);
-
                 if(await pageSJC.ReloadAndCheckPageError404(page))
                 {
-                    PrintMessage.Error("Error 404");
-                    return;
+                    PrintMessage.Error("Page error");
+                    return false;
                 }
             }
+
             await pageSJC.TakeScreenShot(page, pageSJC.CreateScreenShotPath(folderPath));
             PrintMessage.Success($"Register succesfull");
+            return true;
         }
         private static void ShowTimeNow()
         {
             PrintMessage.Information($"Time now is {DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")}");
+        }
+        public static async Task ScheduleTaskAt9AM(Action task)
+        {
+            // Calculate the time until the next 9:00 AM
+            DateTime now = DateTime.Now;
+            DateTime next9AM = now.Date.AddHours(9);
+
+            // If it's already past 9:00 AM, schedule for the next day
+            if (now > next9AM)
+            {
+                next9AM = next9AM.AddDays(1);
+            }
+
+            TimeSpan delay = next9AM - now;
+
+            // Wait until 9:00 AM
+            await Task.Delay(delay);
+
+            // Execute the task
+            task();
         }
     }
 }

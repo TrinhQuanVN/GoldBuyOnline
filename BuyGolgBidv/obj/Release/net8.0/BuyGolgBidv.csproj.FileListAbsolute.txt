@@ -1,3 +1,4 @@
+C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\bin\Release\net8.0\Microsoft.Playwright.dll
 C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\bin\Release\net8.0\.playwright\node\win32_x64\node.exe
 C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\bin\Release\net8.0\.playwright\node\LICENSE
 C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\bin\Release\net8.0\.playwright\package\api.json
@@ -342,16 +343,15 @@ C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\bin\Release\net8.0\BuyGolgBi
 C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\bin\Release\net8.0\BuyGolgBidv.dll
 C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\bin\Release\net8.0\BuyGolgBidv.pdb
 C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\bin\Release\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
-C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\bin\Release\net8.0\Microsoft.Playwright.dll
 C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\obj\Release\net8.0\BuyGolgBidv.csproj.AssemblyReference.cache
 C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\obj\Release\net8.0\BuyGolgBidv.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\obj\Release\net8.0\BuyGolgBidv.AssemblyInfoInputs.cache
 C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\obj\Release\net8.0\BuyGolgBidv.AssemblyInfo.cs
 C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\obj\Release\net8.0\BuyGolgBidv.csproj.CoreCompileInputs.cache
+C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\obj\Release\net8.0\BuyGolgBidv.sourcelink.json
 C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\obj\Release\net8.0\BuyGolgB.40434491.Up2Date
 C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\obj\Release\net8.0\BuyGolgBidv.dll
 C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\obj\Release\net8.0\refint\BuyGolgBidv.dll
 C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\obj\Release\net8.0\BuyGolgBidv.pdb
 C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\obj\Release\net8.0\BuyGolgBidv.genruntimeconfig.cache
 C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\obj\Release\net8.0\ref\BuyGolgBidv.dll
-C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\obj\Release\net8.0\BuyGolgBidv.sourcelink.json

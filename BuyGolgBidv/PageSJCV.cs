@@ -57,7 +57,7 @@ namespace BuyGolgBidv
             }
             else
             {
-                StoreIndex = 0;
+                StoreIndex = 1;
             }
 
         }
@@ -170,22 +170,24 @@ namespace BuyGolgBidv
         {
             try
             {
-                if (await SelectArea(page))
-                {
-                    if (await SelectStore(page))
-                    {
-                        var api = new ApiAntiCaptchaTop(ApiAntiCaptchaTop, await GetSourceCode(page), UrlRegister);
-                        var token = api.SolveCaptcha(page);
+                await SelectArea(page);
+                if(await SelectStore(page)){
 
-                        await page.EvaluateAsync(@"(token) => {
+                    Random random = new Random();
+                    int[] options = { 1, 2, 3, 4 };
+                    int randomNumber = options[random.Next(options.Length)];
+                    StoreIndex = randomNumber;
+
+                    var api = new ApiAntiCaptchaTop(ApiAntiCaptchaTop, await GetSourceCode(page), UrlRegister);
+                    var token =await api.SolveCaptcha(page);
+
+                    await page.EvaluateAsync(@"(token) => {
                             document.getElementById('g-recaptcha-response').innerHTML = token;}", token);
 
-                        await page.ClickAsync("#register_form_submit");
-                        await page.WaitForURLAsync(UrlRegister);
+                    await page.ClickAsync("#register_form_submit");
+                    await page.WaitForURLAsync(UrlRegister);
 
-                        return IsRegisterSuccess(await page.ContentAsync());
-
-                    }
+                    return IsRegisterSuccess(await page.ContentAsync());
                 }
                 return false;
 

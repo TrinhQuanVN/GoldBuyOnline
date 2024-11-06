@@ -354,3 +354,4 @@ C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\obj\Debug\net8.0\refint\BuyG
 C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\obj\Debug\net8.0\BuyGolgBidv.pdb
 C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\obj\Debug\net8.0\BuyGolgBidv.genruntimeconfig.cache
 C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\obj\Debug\net8.0\ref\BuyGolgBidv.dll
+C:\Users\trinh\source\repos\BuyGolgBidv\BuyGolgBidv\obj\Debug\net8.0\BuyGolgBidv.sourcelink.json
