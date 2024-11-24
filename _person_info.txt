@@ -1,3 +1,22 @@
+let person = {
+  fullName: 'Phan Thị Hằng',
+  idNumber: '001300023781',
+  issuePlace: 'cục cảnh sát qlhc về ttxh',
+  issueDate: '24/03/2022',
+  address: 'Tổ 9, Minh Khai, Phủ Lý, hà nam',
+  phone: '0862822000',
+  birthday: '28/02/2000',
+  email: 'trinhquanhn1992@gmail.com',
+  vietinSexIndex: 2,
+  vietinLoaiCC: 1,
+  vietinNoiGiaoDich: 1,
+  bidvAccNum: 8892606138, //tài khoản bid
+  bidvAmount: 1,
+  bidvBranch: 1, //dia điểm giao dịch
+  bidvCapital: 1,
+  bidvPurpose: 2,
+  bidvIssuePlace: 0,
+}
 --------------Trịnh Tiến Quân
 let person = {
   fullName: 'trịnh tiến quân',
