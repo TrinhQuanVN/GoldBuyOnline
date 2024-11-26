@@ -6,7 +6,7 @@ let person = {
   address: 'Tổ 9, Minh Khai, Phủ Lý, hà nam',
   phone: '0862822000',
   birthday: '28/02/2000',
-  email: 'trinhquanhn1992@gmail.com',
+  email: 'hangphan280220@gmail.com',
   vietinSexIndex: 2,
   vietinLoaiCC: 1,
   vietinNoiGiaoDich: 1,
