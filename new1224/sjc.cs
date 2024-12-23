@@ -7,11 +7,13 @@ namespace SJCGold
 {
     class Program
     {
-        static readonly string _sjcPageUrl = "https://tructuyen.sjc.com.vn";
+
+        static readonly string _sjcPageUrl = "https://tructuyen.sjc.com.vn/";
         static string _sjcLoginPageUrl = "https://tructuyen.sjc.com.vn/dang-nhap";
         readonly static string _fullName = "trịnh tiến quân";
         readonly static string _idNumber = "035092013752";
         readonly static string _apiKey = "796b02353453441eb50179e374758059";
+        readonly static string _urlApi = "https://anticaptcha.top/in.php";
         static async Task Main(string[] args)
         {
             var playwright = await Playwright.CreateAsync();
@@ -19,9 +21,12 @@ namespace SJCGold
             var content = browser.NewContextAsync();
             var page = await browser.NewPageAsync();
 
+            Console.WriteLine("enter any key to run");
+            Console.ReadKey();
             await GoPage(page, _sjcLoginPageUrl);
             await Login(page, _fullName, _idNumber);
             await Register(page, _apiKey);
+            Console.ReadKey();
 
         }
         static async Task GoPage(IPage page, string url)
@@ -34,7 +39,7 @@ namespace SJCGold
         }
         static async Task Login(IPage page, string fullName, string idNumber)
         {
-            await page.EvaluateAsync<string>(@"
+            var task1 = page.EvaluateAsync<string>(@"
          (fullname) => {
              function triggerEvent(el, type) {
                  const event = new Event(type, { bubbles: true });
@@ -47,7 +52,7 @@ namespace SJCGold
              triggerEvent(tb1, 'input');
          }", fullName);
 
-            await page.EvaluateAsync<string>(@"
+            var task2 = page.EvaluateAsync<string>(@"
          (idNumber) => {
              function triggerEvent(el, type) {
                  const event = new Event(type, { bubbles: true });
@@ -58,11 +63,14 @@ namespace SJCGold
              triggerEvent(tb2, 'change');
              triggerEvent(tb2, 'input');
          }", idNumber);
-            await page.ClickAsync("#sign_in_submit");
-            await page.WaitForURLAsync(_sjcPageUrl, new()
+            Task.WaitAll(new Task[] {task1,task2});
+            var taskWait = page.WaitForURLAsync(_sjcPageUrl, new()
             {
-                WaitUntil = WaitUntilState.Load,
+                Timeout = 2000,
+                WaitUntil = WaitUntilState.DOMContentLoaded,
             });
+            await page.ClickAsync("#sign_in_submit");
+            await taskWait;
         }
         static async Task Register(IPage page, string apiKey)
         {
@@ -95,7 +103,7 @@ namespace SJCGold
                 //await SelectHinhThuc(page, index);
                 await SolveCaptchaAsync(page);
                 await page.ClickAsync("#register_form_submit");
-                await page.WaitForURLAsync(_sjcPageUrl);
+                //await page.WaitForURLAsync(_sjcPageUrl);
 
             }
             catch (Exception)
@@ -166,8 +174,6 @@ namespace SJCGold
                 await page.EvaluateAsync(@"(token) => {
                     document.getElementById('g-recaptcha-response').innerHTML = token;}", token);
 
-                await page.ClickAsync("#register_form_submit");
-                await page.WaitForURLAsync(_sjcPageUrl);
             }
             catch (Exception)
             {
@@ -209,4 +215,5 @@ namespace SJCGold
         }
     }
 }
+
 
