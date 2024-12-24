@@ -1,6 +1,6 @@
 using Microsoft.Playwright;
 using System.Text;
-using static System.Net.Mime.MediaTypeNames;
+using System.Text.RegularExpressions;
 
 namespace AgriGold
 {
@@ -73,19 +73,34 @@ namespace AgriGold
         {
             try
             {
-                var script = @"(indexChiNhanh)=>{
+                var script1 = @"(indexChiNhanh)=>{
                     function triggerEvent(el, type) {
                         const event = new Event(type, { bubbles: true });
                         el.dispatchEvent(event);
                     }
                     const inputElement = document.getElementById('input-25');
                     inputElement.click();
+                }";//.v-list-item__content
+                var script2 = @"(indexChiNhanh)=>{
+                    function triggerEvent(el, type) {
+                        const event = new Event(type, { bubbles: true });
+                        el.dispatchEvent(event);
+                    }
                     const listItem = document.querySelectorAll('.v-list-item__content');
-                    listItem[indexChiNhanh].click();
+                    listItem[1].click();
+                }";//
+                var script3 = @"(indexChiNhanh)=>{
+                    function triggerEvent(el, type) {
+                        const event = new Event(type, { bubbles: true });
+                        el.dispatchEvent(event);
+                    }
                     const button = document.querySelector('button[type=""button""][step=""3""].btn-main.next-step');
                     button.click();
-                }";
-                await page.EvaluateAsync(script, indexChiNhanh);
+                }";//.v-list-item__content
+                await page.EvaluateAsync(script1, indexChiNhanh);
+                var a = await page.EvaluateAsync(script2, indexChiNhanh);
+                await page.EvaluateAsync(script3, indexChiNhanh);
+
             }
             catch (Exception)
             {
@@ -99,7 +114,8 @@ namespace AgriGold
                 if (img == null) return false;
                 var source = await img.GetAttributeAsync("src");
                 var base64 = source.Split(',')[1];
-                var captcha = await PostRequestAsync(base64);
+                var response = await PostRequestAsync(base64);
+                var captcha = ReadResponseCaptcha(response);
                 await page.FillAsync("input[id=input-131]", captcha);
                 return true;
             }
@@ -117,7 +133,7 @@ namespace AgriGold
                         const event = new Event(type, { bubbles: true });
                         el.dispatchEvent(event);
                     }
-                    const e = document.querySelector(query);
+                    const e = document.querySelector(id);
                     e.value = value;
                     triggerEvent(e, 'input');
                     triggerEvent(e, 'change');
@@ -198,6 +214,14 @@ namespace AgriGold
             {
                 return string.Empty;
             }
+        }
+        private static string ReadResponseCaptcha(string response)
+        {
+            string pattern = "\"captcha\":\"([^\"]+)\"";
+
+            // Use Regex.Match to find the first match
+            Match match = Regex.Match(response, pattern);
+            return match.Groups[1].Value;
         }
     } 
 }
