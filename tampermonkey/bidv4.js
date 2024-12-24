@@ -30,6 +30,15 @@ let person = {
   bidvIssuePlace: 0,
 }
     async function main() {
+        document.addEventListener('keydown', function(event) {
+            // Check if the F2 key is pressed (keyCode for F2 is 113)
+            if (event.key === "F2") {
+                // Prevent default action if needed (e.g., prevent browser's F2 action)
+                event.preventDefault();
+                // Focus on the otpcode input element
+                document.getElementById('otpcode').focus();
+            }
+        });
         await fillInput('input[name=addREss2]', person.address); // address2
         await fillInput('input[name=addREss1]', person.address); // address1
         await fillInput('input[name=aMOunt]', person.bidvAmount); // amount
