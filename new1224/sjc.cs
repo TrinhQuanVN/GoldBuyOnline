@@ -2,32 +2,10 @@
 using Microsoft.Playwright;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
-namespace sjcgold
+namespace sjc
 {
-    class User
-    {
-        public User(string fullName, string adress, string email, string phone, string idNumber, string idPlace, string birthday, string idDate)
-        {
-            FullName = fullName;
-            Adress = adress;
-            Email = email;
-            Phone = phone;
-            IdNumber = idNumber;
-            IdPlace = idPlace;
-            Birthday = birthday;
-            IdDate = idDate;
-        }
-
-        public string FullName { get; set; }
-        public string Adress { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
-        public string IdNumber { get; set; }
-        public string IdPlace { get; set; }
-        public string Birthday { get; set; }
-        public string IdDate { get; set; }
-    }
     class Program
     {
         static readonly string _sjcPageUrl = "https://tructuyen.sjc.com.vn/";
@@ -55,70 +33,19 @@ namespace sjcgold
             var content = browser.NewContextAsync();
             var page = await browser.NewPageAsync();
 
-            var user = GetUserFromTextFile();
-            Console.WriteLine($"Register sjc for {user.Result.FullName} " + $"id : {user.Result.IdNumber}");
-            Console.WriteLine("enter any key to run");
-            Console.ReadKey();
             await GoPage(page, _sjcLoginPageUrl);
-            await Login(page, user.Result.FullName, user.Result.IdNumber);
+            Console.Write("enter full name: ");
+            var name = Console.ReadLine();
+            Console.Write("enter id: ");
+            var id = Console.ReadLine();
+            await Login(page, name.Trim(), id.Trim());
+
+            Console.WriteLine("enter any key to register");
+            Console.ReadKey();
             await Register(page, _apiKey);
             Console.ReadKey();
         }
-        static string ExtractValue(string content, string key)
-        {
-            // Find the key in the content
-            var startIndex = content.IndexOf(key, StringComparison.OrdinalIgnoreCase);
-            if (startIndex == -1)
-            {
-                return string.Empty;
-            }
-
-            // Move the index to the value part
-            startIndex = content.IndexOf(":", startIndex) + 1;
-
-            // Find the end of the value (either ',' or '}')
-            var endIndex = content.IndexOf(',', startIndex);
-            if (endIndex == -1)
-            {
-                endIndex = content.IndexOf('}', startIndex);
-            }
-
-            if (endIndex == -1)
-            {
-                return string.Empty;
-            }
-
-            // Extract and clean the value
-            var value = content.Substring(startIndex, endIndex - startIndex).Trim();
-            return value.Trim('\'', '"', ' ');
-        }
-
-        static async Task<User?> GetUserFromTextFile(string txtPath = "user.txt")
-        {
-            try
-            {
-                var content = await File.ReadAllTextAsync(txtPath);
-
-                // Extract properties using string comparison
-                string fullName = ExtractValue(content, "fullName");
-                string address = ExtractValue(content, "address");
-                string email = ExtractValue(content, "email");
-                string phone = ExtractValue(content, "phone");
-                string idNumber = ExtractValue(content, "idNumber");
-                string idPlace = ExtractValue(content, "issuePlace");
-                string birthday = ExtractValue(content, "birthday");
-                string idDate = ExtractValue(content, "issueDate");
-
-                // Create a new User instance
-                return new User(fullName, address, email, phone, idNumber, idPlace, birthday, idDate);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-                return null;
-
-            }
-        }
+        
         static async Task GoPage(IPage page, string url)
         {
             await page.GotoAsync(url);
@@ -129,18 +56,19 @@ namespace sjcgold
         {
             try
             {
-                var task1 = page.EvaluateAsync<string>(@"
-                (fullname) => {
-                    function triggerEvent(el, type) {
-                        const event = new Event(type, { bubbles: true });
-                        el.dispatchEvent(event);
-                    }
+                //var task1 = page.EvaluateAsync<string>(@"
+                //(fullname) => {
+                //    function triggerEvent(el, type) {
+                //        const event = new Event(type, { bubbles: true });
+                //        el.dispatchEvent(event);
+                //    }
 
-                    const tb1 = document.querySelector('#id_name');
-                    tb1.value = fullname;
-                    triggerEvent(tb1, 'change');
-                    triggerEvent(tb1, 'input');
-                }", fullName);
+                //    const tb1 = document.querySelector('#id_name');
+                //    tb1.value = fullname;
+                //    triggerEvent(tb1, 'change');
+                //    triggerEvent(tb1, 'input');
+                //}", fullName);
+                await page.FillAsync("#id_name", fullName);
 
                 var task2 = page.EvaluateAsync<string>(@"
                 (idNumber) => {
@@ -153,7 +81,9 @@ namespace sjcgold
                     triggerEvent(tb2, 'change');
                     triggerEvent(tb2, 'input');
                 }", idNumber);
-                await Task.WhenAll([task1, task2]);
+                //await Task.WhenAll([task1, task2]);
+                await Task.WhenAll([ task2]);
+
 
                 await page.ClickAsync("#sign_in_submit");
                 await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
