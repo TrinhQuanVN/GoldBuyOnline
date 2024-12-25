@@ -15,7 +15,7 @@ namespace sjc
         static async Task Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-
+            Console.InputEncoding = System.Text.Encoding.UTF8;
             Console.WriteLine("Enter 0 if Headless false or enter anything");
 
             var input = Console.ReadLine();
