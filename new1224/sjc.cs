@@ -14,19 +14,21 @@ namespace sjc
         readonly static string _urlApi = "https://anticaptcha.top/in.php";
         static async Task Main(string[] args)
         {
-            Console.OutputEncoding = System.Text.Encoding.UTF8;
-            Console.InputEncoding = System.Text.Encoding.UTF8;
-            Console.WriteLine("Enter 0 if Headless false or enter anything");
+            Console.OutputEncoding = System.Text.Encoding.Unicode;
+            Console.InputEncoding = System.Text.Encoding.Unicode;
 
-            var input = Console.ReadLine();
+            Console.Write("type 0 to show browser: ");
+
+            var input = Console.ReadKey();
             var headless = true;
-            if (!string.IsNullOrEmpty(input))
+            if (input.Key == ConsoleKey.D0 || input.Key == ConsoleKey.NumPad0)
             {
-                if (input == "0")
-                {
-                    headless = false;
-                }
+                headless = false;
             }
+            Console.Write("type full name: ");
+            var name = Console.ReadLine() ?? throw new Exception("full name can not empty");
+            Console.Write("type id: ");
+            var id = Console.ReadLine() ?? throw new Exception("id can not empty");
 
             var playwright = await Playwright.CreateAsync();
             var browser = await playwright.Firefox.LaunchAsync(new() { Headless = headless });
@@ -34,10 +36,7 @@ namespace sjc
             var page = await browser.NewPageAsync();
 
             await GoPage(page, _sjcLoginPageUrl);
-            Console.Write("enter full name: ");
-            var name = Console.ReadLine();
-            Console.Write("enter id: ");
-            var id = Console.ReadLine();
+            
             await Login(page, name.Trim(), id.Trim());
 
             Console.WriteLine("enter any key to register");
