@@ -2,18 +2,17 @@ using Microsoft.Playwright;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace agrigold
+namespace Agrigold
 {
     class User
     {
-        public User(string fullName, string adress, string email, string phone, string idNumber, string idPlace, string birthday, string idDate)
+        public User(string fullName, string adress, string email, string phone, string idNumber, string birthday, string idDate)
         {
             FullName = fullName;
             Adress = adress;
             Email = email;
             Phone = phone;
             IdNumber = idNumber;
-            IdPlace = idPlace;
             Birthday = birthday;
             IdDate = idDate;
         }
@@ -23,7 +22,7 @@ namespace agrigold
         public string Email { get; set; }
         public string Phone { get; set; }
         public string IdNumber { get; set; }
-        public string IdPlace { get; set; }
+        public string IdPlace = "CCSQLHCVTTXH";
         public string Birthday { get; set; }
         public string IdDate { get; set; }
 
@@ -35,93 +34,74 @@ namespace agrigold
         readonly static string _urlApi = "https://anticaptcha.top/api/captcha";
         static async Task Main(string[] args)
         {
-            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            Console.OutputEncoding = System.Text.Encoding.Unicode;
+            Console.InputEncoding = System.Text.Encoding.Unicode;
 
-            Console.WriteLine("Enter 0 if Headless false or enter anything");
-
-            var input = Console.ReadLine();
+            Console.Write("type 0 to show browser: ");
+            var input = Console.ReadKey();
             var headless = true;
-            if (!string.IsNullOrEmpty(input))
+            if (input.Key == ConsoleKey.D0 || input.Key == ConsoleKey.NumPad0)
             {
-                if (input == "0")
-                {
-                    headless = false;
-                }
+                headless = false;
             }
+            Console.WriteLine();
+            var user = GetUserInput() ?? throw new Exception("null user input");
+            ShowUserInfoToUser("Register agri for:", user);
             var playwright = await Playwright.CreateAsync();
             var browser = await playwright.Firefox.LaunchAsync(new() { Headless = headless });
             var content = browser.NewContextAsync();
             var page = await browser.NewPageAsync();
 
-            var user = GetUserFromTextFile();
-            Console.WriteLine($"Register sjc for {user.Result.FullName} " + $"id : {user.Result.IdNumber}");
-            Console.WriteLine("enter any key to run");
+            
+            Console.WriteLine("press any key to run");
             Console.ReadKey();
-            await RunAsync(page, user.Result);
+            await RunAsync(page, user);
 
         }
-        static string ExtractValue(string content, string key)
+        private static void ShowUserInfoToUser(string message, User user)
         {
-            // Find the key in the content
-            var startIndex = content.IndexOf(key, StringComparison.OrdinalIgnoreCase);
-            if (startIndex == -1)
-            {
-                return string.Empty;
-            }
-
-            // Move the index to the value part
-            startIndex = content.IndexOf(":", startIndex) + 1;
-
-            // Find the end of the value (either ',' or '}')
-            var endIndex = content.IndexOf(',', startIndex);
-            if (endIndex == -1)
-            {
-                endIndex = content.IndexOf('}', startIndex);
-            }
-
-            if (endIndex == -1)
-            {
-                return string.Empty;
-            }
-
-            // Extract and clean the value
-            var value = content.Substring(startIndex, endIndex - startIndex).Trim();
-            return value.Trim('\'', '"', ' ');
+            Console.WriteLine(message);
+            Console.WriteLine($"{user.FullName}");
+            Console.WriteLine($"{user.Adress}");
+            Console.WriteLine($"{user.Email}");
+            Console.WriteLine($"{user.Phone}");
+            Console.WriteLine($"{user.IdNumber}");
+            Console.WriteLine($"{user.Birthday}");
+            Console.WriteLine($"{user.IdDate}");
         }
-
-        static async Task<User?> GetUserFromTextFile(string txtPath = "user.txt")
+        private static User? GetUserInput()
         {
             try
             {
-                var content = await File.ReadAllTextAsync(txtPath);
+                Console.WriteLine("type user info <full name> & <adress> & <email> & <phone> & <id number> & <birth day> & <id date>");
+                var input = Console.ReadLine() ?? throw new Exception("input can not empty");
+                string[] values = input.Split("&");
+                if (values.Length != 7) throw new Exception("your input need contain 7 values");
+                return new User(
+                    values[0].Trim(),
+                    values[1].Trim(),
+                    values[2].Trim(),
+                    values[3].Trim(),
+                    values[4].Trim(),
+                    values[5].Trim(),
+                    values[6].Trim()
+                    );
 
-                // Extract properties using string comparison
-                string fullName = ExtractValue(content, "fullName");
-                string address = ExtractValue(content, "address");
-                string email = ExtractValue(content, "email");
-                string phone = ExtractValue(content, "phone");
-                string idNumber = ExtractValue(content, "idNumber");
-                string idPlace = ExtractValue(content, "issuePlace");
-                string birthday = ExtractValue(content, "birthday");
-                string idDate = ExtractValue(content, "issueDate");
-
-                // Create a new User instance
-                return new User(fullName, address, email, phone, idNumber, idPlace, birthday, idDate);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine(e.Message);
                 return null;
-
             }
         }
+
         private static async Task RunAsync(IPage page, User user)
         {
             while (true)
             {
                 await GotoAgriPage(page, _agriPageUrl);
                 await FillFormAsync(page, user);
-
+                Console.WriteLine("try register again!");
                 await page.ReloadAsync();
             }
         }
@@ -180,7 +160,7 @@ namespace agrigold
                 var a = await page.EvaluateAsync(script2, indexChiNhanh);
                 await page.EvaluateAsync(script3, indexChiNhanh);
                 await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-                Console.WriteLine("step 1 finished");
+                Console.WriteLine($"selected chi nhanh {indexChiNhanh}");
 
             }
             catch (Exception)
@@ -192,7 +172,7 @@ namespace agrigold
             try
             {
                 var img = await page.WaitForSelectorAsync("img[data-v-772eadec]");
-                if (img == null) return ;
+                if (img == null) return;
                 var source = await img.GetAttributeAsync("src");
                 var base64 = source.Split(',')[1];
                 var response = await PostRequestAsync(base64);
@@ -243,7 +223,7 @@ namespace agrigold
             {
             }
         }
-        private static async Task FillFormAsync(IPage page,User user)
+        private static async Task FillFormAsync(IPage page, User user)
         {
             try
             {
