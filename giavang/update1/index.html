@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gold Prices</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: url('anh nen.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        #datetime {
+            font-size: 3em; /* Increased font size for date/time */
+            text-align: center;
+            margin: 30px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            color: #f6f5ee;
+        }
+        table {
+            width: calc(100% - 40px); /* Full width minus margin */
+            margin: 0 auto;
+            border-collapse: collapse;
+            background-color: transparent;
+            color: #fbfaf6;
+            margin-left: 10px;
+            margin-right: 10px;
+            font-size: 2em; /* Increased font size for the table */
+        }
+        th, td {
+            padding: 10px; /* Increased padding for better spacing */
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            text-align: center;
+            color: #eeece5;
+            transform: scale(1.2); /* Increase the inner text size */
+            text-align: center;
+        }
+        th {
+            background-color: transparent;
+            color: #edebe1;
+        }
+    </style>
+</head>
+<body>
+    <div id="datetime">Loading date and time...</div>
+    <table>
+        <thead>
+            <tr>
+                <th>VÀNG</th>
+                <th>MUA VÀO</th>
+                <th>BÁN RA</th>
+            </tr>
+        </thead>
+        <tbody id="goldPricesTable">
+            <!-- Rows will be added dynamically -->
+        </tbody>
+    </table>
+
+    <script>
+        // Function to format numbers with commas
+        function formatNumber(number) {
+            return number.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        }
+
+        // Fetch the latest gold prices from the server
+        async function fetchGoldPrices() {
+            const response = await fetch('/gold-prices');
+            const data = await response.json();
+            goldPrices = data; // Update the local gold prices array
+            updateTable();
+        }
+
+        // Function to send updated price to the server
+        async function capnhat(type, buy, sell) {
+            const response = await fetch('/update-price', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ type, buy: parseFloat(buy), sell: parseFloat(sell) })
+            });
+
+            if (response.ok) {
+                console.log('Price updated successfully!');
+                await fetchGoldPrices(); // Reload the updated table
+            } else {
+                console.log('Failed to update the price.');
+            }
+        }
+        // Function to send updated price to the server
+        async function capnhat24k( buy, sell) {
+           await capnhat('24k',buy*1000,sell*1000);
+           await capnhat('23k',(buy-10)*1000,(sell-10)*1000);
+        }
+        // Function to send updated price to the server
+        async function capnhat23k( buy, sell) {
+           await capnhat('23k',buy*1000,sell*1000);
+        }
+
+        // Update the table with formatted numbers
+        function updateTable() {
+            const tableBody = document.getElementById("goldPricesTable");
+            tableBody.innerHTML = ""; // Clear existing rows
+
+            goldPrices.forEach(price => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${price.type}</td>
+                    <td>${formatNumber(price.buy)}</td>
+                    <td>${formatNumber(price.sell)}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+        // Function to update the date and time
+        function updateDateTime() {
+            const now = new Date();
+            const days = ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"];
+            const dayName = days[now.getDay()];
+            const formattedDate = now.toLocaleDateString('vi-VN');
+            const formattedTime = now.toLocaleTimeString('vi-VN');
+            document.getElementById('datetime').innerText = `${dayName}, ${formattedDate} ${formattedTime}`;
+        }
+
+
+        // Initialize the page
+        setInterval(updateDateTime, 1000); // Update the date and time every second
+        updateDateTime();
+        fetchGoldPrices(); // Populate the table with gold prices
+    </script>
+</body>
+</html>
