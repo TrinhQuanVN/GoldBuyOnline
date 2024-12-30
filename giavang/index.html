@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gold Prices</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: url('anh nen.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        #datetime {
+            font-size: 3em; /* Increased font size for date/time */
+            text-align: center;
+            margin: 30px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            color: #f6f5ee;
+        }
+        table {
+            width: calc(100% - 40px); /* Full width minus margin */
+            margin: 0 auto;
+            border-collapse: collapse;
+            background-color: transparent;
+            color: #fbfaf6;
+            margin-left: 10px;
+            margin-right: 10px;
+            font-size: 2em; /* Increased font size for the table */
+        }
+        th, td {
+            padding: 10px; /* Increased padding for better spacing */
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            text-align: center;
+            color: #eeece5;
+            transform: scale(1.2); /* Increase the inner text size */
+            text-align: center;
+        }
+        th {
+            background-color: transparent;
+            color: #edebe1;
+        }
+    </style>
+</head>
+<body>
+    <div id="datetime">Loading date and time...</div>
+    <table>
+        <thead>
+            <tr>
+                <th>VÀNG</th>
+                <th>MUA VÀO</th>
+                <th>BÁN RA</th>
+            </tr>
+        </thead>
+        <tbody id="goldPricesTable">
+            <!-- Rows will be added dynamically -->
+        </tbody>
+    </table>
+
+    <script>
+        // Gold prices array
+        const goldPrices = [
+            { type: "24k", buy: "8.280.000", sell: "8.400.000" },
+            { type: "23k", buy: "8.250.000", sell: "8.390.000" },
+            { type: "18k", buy: "6.100.000", sell: "7.100.000" },
+            { type: "16k", buy: "4.900.000", sell: "5.900.000" },
+            { type: "14k", buy: "4.600.000", sell: "5.600.000" },
+            { type: "10k", buy: "3.300.000", sell: "4.300.000" }
+        ];
+
+        // Function to update the table dynamically
+        function updateTable() {
+            const tableBody = document.getElementById("goldPricesTable");
+            tableBody.innerHTML = ""; // Clear existing rows
+
+            goldPrices.forEach(price => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${price.type}</td>
+                    <td>${price.buy}</td>
+                    <td>${price.sell}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Function to update the date and time
+        function updateDateTime() {
+            const now = new Date();
+            const days = ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"];
+            const dayName = days[now.getDay()];
+            const formattedDate = now.toLocaleDateString('vi-VN');
+            const formattedTime = now.toLocaleTimeString('vi-VN');
+            document.getElementById('datetime').innerText = `${dayName}, ${formattedDate} ${formattedTime}`;
+        }
+
+        // Initialize the page
+        setInterval(updateDateTime, 1000); // Update the date and time every second
+        updateDateTime();
+        updateTable(); // Populate the table with gold prices
+    </script>
+</body>
+</html>
